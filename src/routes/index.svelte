@@ -1,88 +1,45 @@
 <script>
 	import { onMount } from 'svelte';
-	import { dev } from '$app/env';
 	import { Jumper } from 'svelte-loading-spinners';
-	import Card from '../components/Card.svelte';
+	import Game from '../components/Game.svelte';
 	import GameResults from '../components/GameResults.svelte';
+	import { getKeywords, getMovieCredits, getRandomMovie } from '../functions/http-requests';
 
 	let movie;
 	let keywords = [];
 	let cast = [];
-	let numberOfNames;
 	let guess;
 	let isCorrect = false;
 	let showGame = true;
-	let showNumbers = true;
-	let showNames = false;
-	let showResults = false;
 	let isLoading = true;
 
-	const baseUrl = dev ? import.meta.env.VITE_DEV_API : import.meta.env.VITE_PROD_API;
-
 	onMount(async () => {
-		await getRandomMovie();
-		await getKeywords();
-		await getMovieCredits();
-		isLoading = false;
+		startNewGame();
 	});
-
-	const getRandomMovie = async () => {
-		const movieResponse = await fetch(baseUrl + '/api/random-movie');
-		movie = await movieResponse.json();
-	};
-
-	const getKeywords = async () => {
-		const keywordsResponse = await fetch(baseUrl + `/api/${movie.id}-keywords`);
-		const allKeywords = await keywordsResponse.json();
-		allKeywords.forEach((keyword, i) => {
-			if (i < 10) {
-				keywords = [...keywords, keyword];
-			}
-		});
-	};
-
-	const getMovieCredits = async () => {
-		const castResponse = await fetch(baseUrl + `/api/${movie.id}-credits`);
-		const allCast = await castResponse.json();
-		allCast.forEach((castMember, i) => {
-			if (i < 10) {
-				cast = [...cast, castMember];
-			}
-		});
-		cast = cast.reverse();
-	};
-
-	const onNumberSelected = (event) => {
-		numberOfNames = event.detail.word;
-		showNumbers = false;
-		showNames = true;
-	};
-
-	const onGuessSubmit = () => {
-		isCorrect = guess.toLowerCase() === movie.title.toLowerCase();
-		showNames = false;
-		showGame = false;
-		showResults = true;
-	};
 
 	const onNewGame = async () => {
 		isLoading = true;
 		movie;
 		keywords = [];
 		cast = [];
-		cast = [];
-		numberOfNames;
 		guess = '';
 		isCorrect = false;
 		showGame = true;
-		showNumbers = true;
-		showResults = false;
 
-		await getRandomMovie();
-		await getKeywords();
-		await getMovieCredits();
+		startNewGame();
+	};
 
+	const startNewGame = async () => {
+		movie = await getRandomMovie();
+		keywords = await getKeywords(movie.id);
+		cast = await getMovieCredits(movie.id);
 		isLoading = false;
+	};
+
+	const onGuessSubmit = (event) => {
+		guess = event.detail.guess;
+		isCorrect = guess.toLowerCase() === movie.title.toLowerCase();
+		showGame = false;
 	};
 </script>
 
@@ -90,69 +47,8 @@
 	<div class="flex justify-center">
 		<Jumper size="200" color="#9333ea" unit="px" />
 	</div>
+{:else if showGame}
+	<Game {keywords} cast={cast.reverse()} on:guesssubmit={onGuessSubmit} />
 {:else}
-	{#if showGame}
-		<h3 class="text-2xl dark:text-white">
-			{keywords.length} words used to describe this movie are...
-		</h3>
-		<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
-			{#each keywords as keyword}
-				<Card word={keyword.name} />
-			{/each}
-		</div>
-
-		{#if showNumbers}
-			<h3 class="text-2xl dark:text-white">How many names do you need to guess this movie?</h3>
-			<p>* from lowest billed to highest billed.</p>
-			<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
-				<Card word={0} on:cardselected={onNumberSelected} />
-				{#each cast as credit, i}
-					<Card word={i + 1} on:cardselected={onNumberSelected} />
-				{/each}
-			</div>
-		{/if}
-
-		{#if showNames}
-			{#if numberOfNames !== 0}
-				<h3 class="text-2xl dark:text-white">
-					Out of the {cast.length} credits in this movie, the {numberOfNames} names from lowest billed
-					to highest are...
-				</h3>
-				<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
-					{#each cast as credit, i}
-						{#if i < numberOfNames}
-							<Card word={credit.name} />
-						{/if}
-					{/each}
-				</div>
-			{/if}
-			<h3 class="text-2xl dark:text-white">What is the name of this movie?</h3>
-			<div class="my-4">
-				<div class="flex">
-					<input
-						class="w-full rounded-l-md text-lg p-4 border-2 border-gray-200 dark:bg-gray-800 dark:border-white-200 dark:text-white"
-						type="text"
-						placeholder="Name of Movie"
-						bind:value={guess}
-					/>
-					<button
-						on:click={onGuessSubmit}
-						class="text-sm p-4 rounded-l-none rounded-r-md border-gray-200 bg-gray-200 uppercase font-bold"
-						>Submit
-					</button>
-				</div>
-			</div>
-		{/if}
-	{/if}
-
-	{#if showResults}
-		<GameResults
-			{guess}
-			{movie}
-			{isCorrect}
-			{keywords}
-			cast={cast.reverse()}
-			on:newgame={onNewGame}
-		/>
-	{/if}
+	<GameResults {guess} {movie} {isCorrect} {keywords} {cast} on:newgame={onNewGame} />
 {/if}

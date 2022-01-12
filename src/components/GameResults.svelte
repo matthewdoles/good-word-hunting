@@ -55,7 +55,9 @@
 			src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
 			alt={movie.title}
 		/>
-		<button class="w-1/4 btn btn-block my-4" on:click={() => dispatch('newgame')}>Play Again</button
+		<button
+			class="w-1/4 btn btn-block my-4 border-0 bg-purple-600"
+			on:click={() => dispatch('newgame')}>Play Again</button
 		>
 	</div>
 	<h3 class="text-2xl dark:text-white">Keywords</h3>
