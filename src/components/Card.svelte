@@ -1,6 +1,5 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
-	import { loop_guard } from 'svelte/internal';
 	import { scale } from 'svelte/transition';
 	export let word;
 
