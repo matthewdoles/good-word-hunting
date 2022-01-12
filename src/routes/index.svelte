@@ -1,8 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import { dev } from '$app/env';
-	import { fade } from 'svelte/transition';
 	import Card from '../components/Card.svelte';
+	import GameResults from '../components/GameResults.svelte';
 
 	let movie;
 	let keywords = [];
@@ -16,10 +16,20 @@
 	let showNames = false;
 	let showResults = false;
 
+	const baseUrl = dev ? import.meta.env.VITE_DEV_API : import.meta.env.VITE_PROD_API;
+
 	onMount(async () => {
-		const baseUrl = dev ? import.meta.env.VITE_DEV_API : import.meta.env.VITE_PROD_API;
+		await getRandomMovie();
+		await getKeywords();
+		await getMovieCredits();
+	});
+
+	const getRandomMovie = async () => {
 		const movieResponse = await fetch(baseUrl + '/api/random-movie');
 		movie = await movieResponse.json();
+	};
+
+	const getKeywords = async () => {
 		const keywordsResponse = await fetch(baseUrl + `/api/${movie.id}-keywords`);
 		const allKeywords = await keywordsResponse.json();
 		allKeywords.forEach((keyword, i) => {
@@ -27,6 +37,9 @@
 				keywords = [...keywords, keyword];
 			}
 		});
+	};
+
+	const getMovieCredits = async () => {
 		const castResponse = await fetch(baseUrl + `/api/${movie.id}-credits`);
 		const allCast = await castResponse.json();
 		allCast.forEach((castMember, i) => {
@@ -35,7 +48,7 @@
 			}
 		});
 		castLowToHigh = castHighToLow.reverse();
-	});
+	};
 
 	const onNumberSelected = (event) => {
 		numberOfNames = event.detail.word;
@@ -48,6 +61,23 @@
 		showNames = false;
 		showGame = false;
 		showResults = true;
+	};
+
+	const onNewGame = async () => {
+		movie;
+		keywords = [];
+		castHighToLow = [];
+		castLowToHigh = [];
+		numberOfNames;
+		guess = '';
+		isCorrect = false;
+		showGame = true;
+		showNumbers = true;
+		showResults = false;
+
+		await getRandomMovie();
+		await getKeywords();
+		await getMovieCredits();
 	};
 </script>
 
@@ -106,49 +136,5 @@
 {/if}
 
 {#if showResults}
-	<h3
-		class="text-2xl dark:text-white"
-		transition:fade={{
-			delay: 0,
-			duration: 1000
-		}}
-	>
-		You guessed {guess}
-	</h3>
-	<h3
-		class="text-2xl dark:text-white"
-		transition:fade={{
-			delay: 1000,
-			duration: 1000
-		}}
-	>
-		Your answer is...
-	</h3>
-	<div
-		transition:fade={{
-			delay: 3000,
-			duration: 1000
-		}}
-	>
-		<h3 class="text-2xl dark:text-white">
-			{isCorrect ? 'Correct! The' : 'Incorrect, the'} movie was {movie.title}
-		</h3>
-		<img
-			class="w-1/4"
-			src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-			alt={movie.title}
-		/>
-		<h3 class="text-2xl dark:text-white">Keywords</h3>
-		<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
-			{#each keywords as keyword}
-				<Card word={keyword.name} />
-			{/each}
-		</div>
-		<h3 class="text-2xl dark:text-white">Cast</h3>
-		<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
-			{#each castHighToLow as credit, i}
-				<Card word={credit.name} />
-			{/each}
-		</div>
-	</div>
+	<GameResults {guess} {movie} {isCorrect} {keywords} cast={castHighToLow} on:newgame={onNewGame} />
 {/if}
