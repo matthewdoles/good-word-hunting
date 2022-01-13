@@ -39,12 +39,12 @@
 	<div class="text-2xl my-4 dark:text-white">
 		{#if isCorrect}
 			<div class="flex justify-center">
-				<p class="text-green-500 font-bold pr-1">Correct!</p>
+				<p class="text-green-500 font-bold pr-2">Correct!</p>
 				<p>The movie was <b>{movie.title}</b></p>
 			</div>
 		{:else}
 			<div class="flex justify-center">
-				<p class="text-red-500 font-bold pr-1">Incorrect!</p>
+				<p class="text-red-500 font-bold pr-2">Incorrect!</p>
 				<p>The movie was <b>{movie.title}</b></p>
 			</div>
 		{/if}
@@ -61,13 +61,13 @@
 		>
 	</div>
 	<h3 class="text-2xl dark:text-white">Keywords</h3>
-	<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
+	<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 		{#each keywords as keyword}
 			<Card word={keyword.name} />
 		{/each}
 	</div>
 	<h3 class="text-2xl dark:text-white">Cast</h3>
-	<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
+	<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 		{#each cast as credit, i}
 			<Card word={credit.name} />
 		{/each}
