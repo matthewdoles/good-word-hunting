@@ -6,9 +6,9 @@
 	const dispatch = createEventDispatcher();
 
 	const cardClasses =
-		'p-6 bg-gray-100 text-gray-800 text-center ' +
-		'rounded-md shadow-sm hover:shadow-md flex flex-col items-center ' +
-		'dark:bg-gray-700 dark:hover:shadow-[0px_0px_4px_rgba(255,255,255,0.7)]';
+		'p-6 bg-gray-100 text-gray-800 text-center border-transparent border-4 ' +
+		'rounded-xl shadow-sm hover:shadow-md flex flex-col items-center justify-center ' +
+		'dark:bg-gray-600 hover:border-purple-600';
 </script>
 
 <div class={cardClasses} in:scale on:click={() => dispatch('cardselected', { word })}>

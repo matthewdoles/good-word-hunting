@@ -50,5 +50,12 @@
 {:else if showGame}
 	<Game {keywords} cast={cast.reverse()} on:guesssubmit={onGuessSubmit} />
 {:else}
-	<GameResults {guess} {movie} {isCorrect} {keywords} {cast} on:newgame={onNewGame} />
+	<GameResults
+		{guess}
+		{movie}
+		{isCorrect}
+		{keywords}
+		cast={cast.reverse()}
+		on:newgame={onNewGame}
+	/>
 {/if}

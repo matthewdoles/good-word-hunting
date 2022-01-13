@@ -1,5 +1,6 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
+	import { fly } from 'svelte/transition';
 	import Card from './Card.svelte';
 
 	export let keywords;
@@ -19,19 +20,21 @@
 	};
 </script>
 
-<h3 class="text-2xl dark:text-white">
+<h3 class="text-2xl dark:text-white" in:fly={{ x: -400 }}>
 	{keywords.length} words used to describe this movie are...
 </h3>
-<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
+<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 	{#each keywords as keyword}
 		<Card word={keyword.name} />
 	{/each}
 </div>
 
 {#if showNumbers}
-	<h3 class="text-2xl dark:text-white">How many names do you need to guess this movie?</h3>
-	<p>* from lowest billed to highest billed.</p>
-	<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
+	<h3 class="text-2xl dark:text-white" in:fly={{ x: 400 }}>
+		How many names do you need to guess this movie?
+	</h3>
+	<p class="dark:text-white" in:fly={{ x: 400 }}>* from lowest billed to highest billed</p>
+	<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 		<div class="cursor-pointer">
 			<Card word={0} on:cardselected={onNumberSelected} />
 		</div>
@@ -45,11 +48,11 @@
 
 {#if showNames}
 	{#if numberOfNames !== 0}
-		<h3 class="text-2xl dark:text-white">
+		<h3 class="text-2xl dark:text-white" in:fly={{ x: 400 }}>
 			Out of the {cast.length} credits in this movie, the {numberOfNames} names from lowest billed to
 			highest are...
 		</h3>
-		<div class="my-4 grid gap-4 md:grid-cols-4 grid-cols-2">
+		<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 			{#each cast as credit, i}
 				{#if i < numberOfNames}
 					<Card word={credit.name} />
@@ -57,21 +60,29 @@
 			{/each}
 		</div>
 	{/if}
-	<h3 class="text-2xl dark:text-white">What is the name of this movie?</h3>
-	<div class="my-4">
-		<div class="flex">
-			<input
-				class="w-full rounded-l-md text-lg p-4 border-2 border-gray-200 dark:bg-gray-800 dark:border-white-200 dark:text-white"
-				type="text"
-				placeholder="Name of Movie"
-				on:keyup={(e) => e.key === 'Enter' && dispatch('guesssubmit', { guess })}
-				bind:value={guess}
-			/>
-			<button
-				on:click={() => dispatch('guesssubmit', { guess })}
-				class="text-sm p-4 rounded-l-none rounded-r-md border-gray-200 bg-gray-200 uppercase font-bold"
-				>Submit
-			</button>
+	<div in:fly={{ y: 400 }}>
+		<h3 class="text-2xl dark:text-white">What is the name of this movie?</h3>
+		<div class="my-4">
+			<div class="flex">
+				<input
+					class="w-full bg-gray-100 rounded-l-xl text-lg p-4 border-4 border-purple-500 font-bold dark:bg-gray-800 dark:text-white"
+					type="text"
+					placeholder="Name of movie"
+					on:keyup={(e) => e.key === 'Enter' && dispatch('guesssubmit', { guess })}
+					bind:value={guess}
+				/>
+				<button
+					on:click={() => dispatch('guesssubmit', { guess })}
+					class="text-sm p-4 rounded-l-none rounded-r-xl outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white"
+					>Submit
+				</button>
+			</div>
 		</div>
 	</div>
 {/if}
+
+<style>
+	input {
+		outline: none !important;
+	}
+</style>
