@@ -22,7 +22,7 @@
 	};
 </script>
 
-<h3 class="text-2xl dark:text-white" in:fly={{ x: -400 }}>
+<h3 class="text-2xl dark:text-white" in:fly={{ x: -400, duration: 750 }}>
 	{keywords.length} words used to describe this movie are...
 </h3>
 <div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
@@ -32,10 +32,12 @@
 </div>
 
 {#if showNumbers}
-	<h3 class="text-2xl dark:text-white" in:fly={{ x: 400 }}>
+	<h3 class="text-2xl dark:text-white" in:fly={{ x: 400, duration: 750 }}>
 		How many names do you need to guess this movie?
 	</h3>
-	<p class="dark:text-white" in:fly={{ x: 400 }}>* from lowest billed to highest billed</p>
+	<p class="dark:text-white" in:fly={{ x: 400, duration: 750 }}>
+		* from lowest billed to highest billed
+	</p>
 	<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 		<div class="cursor-pointer">
 			<Card word={0} on:cardselected={onNumberSelected} />
@@ -50,7 +52,7 @@
 
 {#if showNames}
 	{#if numberOfNames !== 0}
-		<h3 class="text-2xl dark:text-white" in:fly={{ x: 400 }}>
+		<h3 class="text-2xl dark:text-white" in:fly={{ x: 400, duration: 750 }}>
 			Out of the {cast.length} credits in this movie, the {numberOfNames} names from lowest billed to
 			highest are...
 		</h3>
@@ -62,7 +64,7 @@
 			{/each}
 		</div>
 	{/if}
-	<div in:fly={{ y: 400 }}>
+	<div in:fly={{ y: 400, duration: 750 }}>
 		<h3 class="text-2xl dark:text-white">What is the name of this movie?</h3>
 		<div class="my-4">
 			<div class="flex">
@@ -87,10 +89,10 @@
 		</div>
 	</div>
 	{#if showMultipleChoice}
-		<h3 class="mt-8 text-2xl dark:text-white" in:fly={{ x: 400 }}>
+		<h3 class="mt-8 text-2xl dark:text-white" in:fly={{ x: 400, duration: 750 }}>
 			Which of these movies do you think it could be?
 		</h3>
-		<div in:fly={{ y: 400 }}>
+		<div in:fly={{ y: 400, duration: 750 }}>
 			<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 				{#each similarMovies as movie}
 					<div class="cursor-pointer h-full">
