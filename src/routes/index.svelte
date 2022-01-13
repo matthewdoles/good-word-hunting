@@ -19,6 +19,7 @@
 	let isCorrect = false;
 	let showGame = true;
 	let isLoading = true;
+	let yScroll;
 
 	onMount(async () => {
 		startNewGame();
@@ -38,6 +39,7 @@
 	};
 
 	const startNewGame = async () => {
+		yScroll = 0;
 		movie = await getRandomMovie();
 		keywords = await getKeywords(movie.id);
 		cast = await getMovieCredits(movie.id);
@@ -46,11 +48,16 @@
 	};
 
 	const onGuessSubmit = (event) => {
-		guess = event.detail.guess;
-		isCorrect = guess.toLowerCase() === movie.title.toLowerCase();
-		showGame = false;
+		if (event.detail.guess.length > 0) {
+			yScroll = 0;
+			guess = event.detail.guess;
+			isCorrect = guess.toLowerCase() === movie.title.toLowerCase();
+			showGame = false;
+		}
 	};
 </script>
+
+<svelte:window bind:scrollY={yScroll} />
 
 {#if isLoading}
 	<div class="flex justify-center">
