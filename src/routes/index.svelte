@@ -3,11 +3,18 @@
 	import { Jumper } from 'svelte-loading-spinners';
 	import Game from '../components/Game.svelte';
 	import GameResults from '../components/GameResults.svelte';
-	import { getKeywords, getMovieCredits, getRandomMovie } from '../functions/http-requests';
+	import { shuffleArray } from '../functions/util';
+	import {
+		getKeywords,
+		getMovieCredits,
+		getRandomMovie,
+		getSimilarMovies
+	} from '../functions/http-requests';
 
 	let movie;
 	let keywords = [];
 	let cast = [];
+	let similarMovies = [];
 	let guess;
 	let isCorrect = false;
 	let showGame = true;
@@ -22,6 +29,7 @@
 		movie;
 		keywords = [];
 		cast = [];
+		similarMovies = [];
 		guess = '';
 		isCorrect = false;
 		showGame = true;
@@ -33,6 +41,7 @@
 		movie = await getRandomMovie();
 		keywords = await getKeywords(movie.id);
 		cast = await getMovieCredits(movie.id);
+		similarMovies = await getSimilarMovies(movie.id);
 		isLoading = false;
 	};
 
@@ -48,7 +57,12 @@
 		<Jumper size="200" color="#9333ea" unit="px" />
 	</div>
 {:else if showGame}
-	<Game {keywords} cast={cast.reverse()} on:guesssubmit={onGuessSubmit} />
+	<Game
+		{keywords}
+		cast={cast.reverse()}
+		similarMovies={shuffleArray([...similarMovies, movie])}
+		on:guesssubmit={onGuessSubmit}
+	/>
 {:else}
 	<GameResults
 		{guess}

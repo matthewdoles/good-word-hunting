@@ -5,9 +5,11 @@
 
 	export let keywords;
 	export let cast;
+	export let similarMovies;
 
 	let showNumbers = true;
 	let showNames = false;
+	let showMultipleChoice = false;
 	let numberOfNames;
 	let guess;
 
@@ -73,12 +75,32 @@
 				/>
 				<button
 					on:click={() => dispatch('guesssubmit', { guess })}
-					class="text-sm p-4 rounded-l-none rounded-r-xl outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white"
+					class="text-sm p-4 rounded-l-none outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white"
 					>Submit
+				</button>
+				<button
+					on:click={() => (showMultipleChoice = true)}
+					class="text-sm p-4 rounded-l-none rounded-r-xl outline-0 border-purple-500 uppercase font-bold bg-gray-100 dark:bg-gray-600 dark:text-white"
+					>Hint
 				</button>
 			</div>
 		</div>
 	</div>
+	{#if showMultipleChoice}
+		<h3 class="mt-8 text-2xl dark:text-white" in:fly={{ x: 400 }}>
+			Which of these movies do you think it could be?
+		</h3>
+		<div in:fly={{ y: 400 }}>
+			<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
+				{#each similarMovies as movie}
+					<Card
+						word={movie.title}
+						on:cardselected={() => dispatch('guesssubmit', { guess: movie.title })}
+					/>
+				{/each}
+			</div>
+		</div>
+	{/if}
 {/if}
 
 <style>

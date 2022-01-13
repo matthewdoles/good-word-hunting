@@ -29,3 +29,15 @@ export const getMovieCredits = async (movieId) => {
 	});
 	return cast;
 };
+
+export const getSimilarMovies = async (movieId) => {
+	const castResponse = await fetch(baseUrl + `/api/${movieId}-similar`);
+	const allSimilar = await castResponse.json();
+	let similar = [];
+	allSimilar.forEach((similarMovie, i) => {
+		if (i < 7) {
+			similar = [...similar, similarMovie];
+		}
+	});
+	return similar;
+};

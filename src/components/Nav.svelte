@@ -4,7 +4,7 @@
 	let darkMode = true;
 
 	onMount(() => {
-		darkMode = document.documentElement.classList.contains('dark');
+		darkMode = document.documentElement.classList.add('dark');
 	});
 </script>
 
