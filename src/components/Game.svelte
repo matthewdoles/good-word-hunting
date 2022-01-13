@@ -93,10 +93,12 @@
 		<div in:fly={{ y: 400 }}>
 			<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 				{#each similarMovies as movie}
-					<Card
-						word={movie.title}
-						on:cardselected={() => dispatch('guesssubmit', { guess: movie.title })}
-					/>
+					<div class="cursor-pointer h-full">
+						<Card
+							word={movie.title}
+							on:cardselected={() => dispatch('guesssubmit', { guess: movie.title })}
+						/>
+					</div>
 				{/each}
 			</div>
 		</div>
