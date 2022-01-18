@@ -1,13 +1,23 @@
 import { dev } from '$app/env';
+import { get } from 'svelte/store';
+import filters from '../stores/filters';
+
 const baseUrl = dev ? import.meta.env.VITE_DEV_API : import.meta.env.VITE_PROD_API;
 
-export const getRandomMovie = async () => {
-	const movieResponse = await fetch(baseUrl + '/api/random-movie');
-	return await movieResponse.json();
+export const getRandomMedia = async () => {
+	const filter = get(filters);
+	console.log(filter);
+	const mediaResponse = await fetch(baseUrl + `/api/random-${filter.mediaType}`);
+	let media = mediaResponse.json();
+	if (filter.mediaType === 'tv') {
+		media.title = media.name;
+	}
+	return media;
 };
 
-export const getKeywords = async (movieId) => {
-	const keywordsResponse = await fetch(baseUrl + `/api/${movieId}-keywords`);
+export const getKeywords = async (mediaId) => {
+	const filter = get(filters);
+	const keywordsResponse = await fetch(baseUrl + `/api/${filter.mediaType}-${mediaId}-keywords`);
 	const allKeywords = await keywordsResponse.json();
 	let keywords = [];
 	allKeywords.forEach((keyword, i) => {
@@ -18,8 +28,9 @@ export const getKeywords = async (movieId) => {
 	return keywords;
 };
 
-export const getMovieCredits = async (movieId) => {
-	const castResponse = await fetch(baseUrl + `/api/${movieId}-credits`);
+export const getMediaCredits = async (mediaId) => {
+	const filter = get(filters);
+	const castResponse = await fetch(baseUrl + `/api/${filter.mediaType}-${mediaId}-credits`);
 	const allCast = await castResponse.json();
 	let cast = [];
 	allCast.forEach((castMember, i) => {
@@ -30,13 +41,17 @@ export const getMovieCredits = async (movieId) => {
 	return cast;
 };
 
-export const getSimilarMovies = async (movieId) => {
-	const castResponse = await fetch(baseUrl + `/api/${movieId}-similar`);
+export const getSimilarMedia = async (mediaId) => {
+	const filter = get(filters);
+	const castResponse = await fetch(baseUrl + `/api/${filter.mediaType}-${mediaId}-similar`);
 	const allSimilar = await castResponse.json();
 	let similar = [];
-	allSimilar.forEach((similarMovie, i) => {
+	allSimilar.forEach((similarMedia, i) => {
 		if (i < 7) {
-			similar = [...similar, similarMovie];
+			if (filter.mediaType === 'tv') {
+				similarMedia.title = similarMedia.name;
+			}
+			similar = [...similar, similarMedia];
 		}
 	});
 	return similar;
