@@ -6,9 +6,8 @@ const baseUrl = dev ? import.meta.env.VITE_DEV_API : import.meta.env.VITE_PROD_A
 
 export const getRandomMedia = async () => {
 	const filter = get(filters);
-	console.log(filter);
 	const mediaResponse = await fetch(baseUrl + `/api/random-${filter.mediaType}`);
-	let media = mediaResponse.json();
+	let media = await mediaResponse.json();
 	if (filter.mediaType === 'tv') {
 		media.title = media.name;
 	}
