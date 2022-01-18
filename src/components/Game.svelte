@@ -1,11 +1,12 @@
 <script>
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import Card from './Card.svelte';
 
 	export let keywords;
 	export let cast;
-	export let similarMovies;
+	export let similarMedia;
+	export let filter;
 
 	let showNumbers = true;
 	let showNames = false;
@@ -23,7 +24,7 @@
 </script>
 
 <h3 class="text-2xl dark:text-white" in:fly={{ x: -400, duration: 750 }}>
-	{keywords.length} words used to describe this movie are...
+	{keywords.length} words used to describe this {filter.prompt.singular} are...
 </h3>
 <div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 	{#each keywords as keyword}
@@ -33,7 +34,7 @@
 
 {#if showNumbers}
 	<h3 class="text-2xl dark:text-white" in:fly={{ x: 400, duration: 750 }}>
-		How many names do you need to guess this movie?
+		How many names do you need to guess this {filter.prompt.singular}?
 	</h3>
 	<p class="dark:text-white" in:fly={{ x: 400, duration: 750 }}>
 		* from lowest billed to highest billed
@@ -53,8 +54,8 @@
 {#if showNames}
 	{#if numberOfNames !== 0}
 		<h3 class="text-2xl dark:text-white" in:fly={{ x: 400, duration: 750 }}>
-			Out of the {cast.length} credits in this movie, the {numberOfNames} names from lowest billed to
-			highest are...
+			Out of the {cast.length} credits in this {filter.prompt.singular}, the {numberOfNames} names from
+			lowest billed to highest are...
 		</h3>
 		<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
 			{#each cast as credit, i}
@@ -65,13 +66,15 @@
 		</div>
 	{/if}
 	<div in:fly={{ y: 400, duration: 750 }}>
-		<h3 class="text-2xl dark:text-white">What is the name of this movie?</h3>
+		<h3 class="text-2xl dark:text-white">
+			What is the name of this {filter.prompt.singular}?
+		</h3>
 		<div class="my-4">
 			<div class="flex">
 				<input
 					class="w-full bg-gray-100 rounded-l-xl text-lg p-4 border-4 border-purple-500 font-bold dark:bg-gray-800 dark:text-white"
 					type="text"
-					placeholder="Name of movie"
+					placeholder={filter.mediaType === 'movie' ? 'Name of movie' : 'Name of show'}
 					on:keyup={(e) => e.key === 'Enter' && dispatch('guesssubmit', { guess })}
 					bind:value={guess}
 				/>
@@ -90,15 +93,15 @@
 	</div>
 	{#if showMultipleChoice}
 		<h3 class="mt-8 text-2xl dark:text-white" in:fly={{ x: 400, duration: 750 }}>
-			Which of these movies do you think it could be?
+			Which of these {filter.prompt.plural} do you think it could be?
 		</h3>
 		<div in:fly={{ y: 400, duration: 750 }}>
 			<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
-				{#each similarMovies as movie}
+				{#each similarMedia as media}
 					<div class="cursor-pointer h-full">
 						<Card
-							word={movie.title}
-							on:cardselected={() => dispatch('guesssubmit', { guess: movie.title })}
+							word={media.title}
+							on:cardselected={() => dispatch('guesssubmit', { guess: media.title })}
 						/>
 					</div>
 				{/each}

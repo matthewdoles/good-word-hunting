@@ -1,36 +1,34 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { Jumper } from 'svelte-loading-spinners';
+	import filters from '../stores/filters';
 	import Game from '../components/Game.svelte';
 	import GameResults from '../components/GameResults.svelte';
 	import { shuffleArray } from '../functions/util';
 	import {
 		getKeywords,
-		getMovieCredits,
-		getRandomMovie,
-		getSimilarMovies
+		getMediaCredits,
+		getRandomMedia,
+		getSimilarMedia
 	} from '../functions/http-requests';
 
-	let movie;
+	let media;
 	let keywords = [];
 	let cast = [];
-	let similarMovies = [];
+	let similarMedia = [];
 	let guess;
 	let isCorrect = false;
 	let showGame = true;
 	let isLoading = true;
 	let yScroll;
 
-	onMount(async () => {
-		startNewGame();
-	});
+	$: $filters, startNewGame();
 
 	const onNewGame = async () => {
-		isLoading = true;
-		movie;
+		media;
 		keywords = [];
 		cast = [];
-		similarMovies = [];
+		similarMedia = [];
 		guess = '';
 		isCorrect = false;
 		showGame = true;
@@ -39,11 +37,12 @@
 	};
 
 	const startNewGame = async () => {
+		isLoading = true;
 		yScroll = 0;
-		movie = await getRandomMovie();
-		keywords = await getKeywords(movie.id);
-		cast = await getMovieCredits(movie.id);
-		similarMovies = await getSimilarMovies(movie.id);
+		media = await getRandomMedia();
+		keywords = await getKeywords(media.id);
+		cast = await getMediaCredits(media.id);
+		similarMedia = await getSimilarMedia(media.id);
 		isLoading = false;
 	};
 
@@ -51,7 +50,7 @@
 		if (event.detail.guess.length > 0) {
 			yScroll = 0;
 			guess = event.detail.guess;
-			isCorrect = guess.toLowerCase() === movie.title.toLowerCase();
+			isCorrect = guess.toLowerCase() === media.title.toLowerCase();
 			showGame = false;
 		}
 	};
@@ -67,15 +66,17 @@
 	<Game
 		{keywords}
 		cast={cast.reverse()}
-		similarMovies={shuffleArray([...similarMovies, movie])}
+		filter={$filters}
+		similarMedia={shuffleArray([...similarMedia, media])}
 		on:guesssubmit={onGuessSubmit}
 	/>
 {:else}
 	<GameResults
 		{guess}
-		{movie}
+		{media}
 		{isCorrect}
 		{keywords}
+		filter={$filters}
 		cast={cast.reverse()}
 		on:newgame={onNewGame}
 	/>

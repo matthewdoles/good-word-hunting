@@ -1,7 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 	import FaLightbulb from 'svelte-icons/fa/FaLightbulb.svelte';
+	import filters from '../stores/filters';
+
 	let darkMode = true;
+	let listItemClasses = 'h-10 leading-10 text-center rounded-lg align-middle cursor-pointer';
 
 	onMount(() => {
 		darkMode = document.documentElement.classList.add('dark');
@@ -23,6 +26,38 @@
 			}}
 		>
 			<FaLightbulb />
+		</div>
+	</div>
+	<div class="flex justify-end flex-1 px-2">
+		<div class="flex items-stretch">
+			<div class="dropdown dropdown-end">
+				<div tabindex="0" class="btn btn-ghost rounded-btn">Filter</div>
+				<ul
+					tabindex="0"
+					class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 text-black"
+				>
+					<li class="">
+						<p
+							on:click={() => filters.changeMediaType('movie')}
+							class={$filters.mediaType === 'movie'
+								? `bg-purple-600 dark:text-white ${listItemClasses}`
+								: `active:bg-purple-600 active:text-white ${listItemClasses}`}
+						>
+							Movie
+						</p>
+					</li>
+					<li class="">
+						<p
+							on:click={() => filters.changeMediaType('tv')}
+							class={$filters.mediaType === 'tv'
+								? `bg-purple-600 dark:text-white ${listItemClasses}`
+								: `active:bg-purple-600 active:text-white ${listItemClasses}`}
+						>
+							TV
+						</p>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>

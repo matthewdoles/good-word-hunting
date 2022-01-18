@@ -5,10 +5,11 @@
 	import Credit from './Credit.svelte';
 
 	export let guess;
-	export let movie;
+	export let media;
 	export let cast;
 	export let keywords;
 	export let isCorrect;
+	export let filter;
 
 	const dispatch = createEventDispatcher();
 </script>
@@ -41,26 +42,26 @@
 		{#if isCorrect}
 			<div class="flex justify-center">
 				<p class="text-green-500 font-bold pr-2">Correct!</p>
-				<p>The movie was <b>{movie.title}</b></p>
+				<p>The {filter.prompt.singular} was <b>{media.title}</b></p>
 			</div>
 		{:else}
 			<div class="flex justify-center">
 				<p class="text-red-500 font-bold pr-2">Incorrect!</p>
-				<p>The movie was <b>{movie.title}</b></p>
+				<p>The {filter.prompt.singular} was <b>{media.title}</b></p>
 			</div>
 		{/if}
 	</div>
 	<div class="flex flex-col items-center">
 		<a
-			href={`https://www.themoviedb.org/movie/${movie.id}-${movie.title.split(' ').join('-')}`}
+			href={`https://www.themoviedb.org/movie/${media.id}-${media.title.split(' ').join('-')}`}
 			target="_blank"
 			class="w-1/4 my-4"
 		>
 			<img
 				class="border-4 border-transparent hover:border-purple-600"
-				href={`https://www.themoviedb.org/movie/${movie.id}-${movie.title.split(' ').join('-')}`}
-				src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-				alt={movie.title}
+				href={`https://www.themoviedb.org/movie/${media.id}-${media.title.split(' ').join('-')}`}
+				src={`https://image.tmdb.org/t/p/w500${media.poster_path}`}
+				alt={media.title}
 			/>
 		</a>
 		<button
