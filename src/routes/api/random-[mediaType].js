@@ -1,7 +1,18 @@
-export async function get() {
-	const randomPage = Math.floor(Math.random() * 80) + 1;
+export async function get({ params }) {
+	let randomPage;
+	let voteCount;
+	if (params.mediaType === 'movie') {
+		randomPage = Math.floor(Math.random() * 110) + 1;
+		voteCount = 1500;
+	} else {
+		randomPage = Math.floor(Math.random() * 22) + 1;
+		voteCount = 500;
+	}
+
 	const path =
-		'/3/discover/movie?api_key=' +
+		'/3/discover/' +
+		params.mediaType +
+		'?api_key=' +
 		import.meta.env.VITE_API_KEY +
 		'&language=' +
 		import.meta.env.VITE_API_LANG +
@@ -10,8 +21,10 @@ export async function get() {
 		'include_video=false' +
 		'&page=' +
 		randomPage +
-		'&vote_count.gte=1500' +
+		'&vote_count.gte=' +
+		voteCount +
 		'&with_original_language=en';
+
 	const res = await fetch(import.meta.env.VITE_API_BASE_PATH + path);
 	const data = await res.json();
 	const randomIndex = Math.floor(Math.random() * data.results.length);

@@ -1,6 +1,7 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { Jumper } from 'svelte-loading-spinners';
+	import { filters } from '../stores/filters';
 	import Game from '../components/Game.svelte';
 	import GameResults from '../components/GameResults.svelte';
 	import { shuffleArray } from '../functions/util';
@@ -20,9 +21,16 @@
 	let showGame = true;
 	let isLoading = true;
 	let yScroll;
+	let filter;
+	let unsubscribe;
 
 	onMount(async () => {
 		startNewGame();
+		unsubscribe = filters.subscribe(($) => (filter = $));
+	});
+
+	onDestroy(() => {
+		unsubscribe();
 	});
 
 	const onNewGame = async () => {
@@ -44,6 +52,9 @@
 		keywords = await getKeywords(movie.id);
 		cast = await getMovieCredits(movie.id);
 		similarMovies = await getSimilarMovies(movie.id);
+		if (filter === 'tv') {
+			similarMovies.forEach((m) => (m.title = m.name));
+		}
 		isLoading = false;
 	};
 
