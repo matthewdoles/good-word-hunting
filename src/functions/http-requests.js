@@ -55,3 +55,11 @@ export const getSimilarMedia = async (mediaId) => {
 	});
 	return similar;
 };
+
+export const getGenres = async () => {
+	const movieGenresResponse = await fetch(baseUrl + '/api/movie-genres');
+	const movieGenres = await movieGenresResponse.json();
+	const tvGenresResponse = await fetch(baseUrl + '/api/tv-genres');
+	const tvGenres = await tvGenresResponse.json();
+	return { tv: tvGenres, movies: movieGenres };
+};
