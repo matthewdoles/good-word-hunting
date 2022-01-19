@@ -5,6 +5,10 @@ const tvMedia = {
   prompt: {
     singular: 'show',
     plural: 'shows'
+  },
+  genre: {
+    id: '',
+    name: ''
   }
 };
 
@@ -13,6 +17,10 @@ const movieMedia = {
   prompt: {
     singular: 'movie',
     plural: 'movies'
+  },
+  genre: {
+    id: '',
+    name: ''
   }
 };
 
@@ -24,6 +32,12 @@ const customFilters = {
     filters.update(() => {
       if (mediaType === 'movie') return movieMedia;
       return tvMedia;
+    });
+  },
+  changeGenre: (genre) => {
+    filters.update((items) => {
+      console.log(items);
+      return { ...items, genre };
     });
   }
 };

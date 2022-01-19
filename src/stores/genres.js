@@ -7,4 +7,4 @@ const fetchGenres = async () => {
 };
 fetchGenres();
 
-export const genres = writable([]);
+export const genres = writable({ tv: [], movies: [] });

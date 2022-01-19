@@ -1,7 +1,6 @@
 <script>
   import { Jumper } from 'svelte-loading-spinners';
   import filters from '../stores/filters';
-  import { genres } from '../stores/genres';
   import Game from '../components/Game.svelte';
   import GameResults from '../components/GameResults.svelte';
   import { shuffleArray } from '../functions/util';
