@@ -27,10 +27,15 @@ export async function get({ params }) {
 
   const res = await fetch(import.meta.env.VITE_API_BASE_PATH + path);
   const data = await res.json();
-  const randomIndex = Math.floor(Math.random() * data.results.length);
-
+  if (params.action === 'random') {
+    const randomIndex = Math.floor(Math.random() * data.results.length);
+    return {
+      staus: 200,
+      body: data.results[randomIndex]
+    };
+  }
   return {
     staus: 200,
-    body: data.results[randomIndex]
+    body: data
   };
 }

@@ -14,6 +14,13 @@ export const getRandomMedia = async () => {
   return media;
 };
 
+export const getPoolSize = async () => {
+  const filter = get(filters);
+  const mediaResponse = await fetch(baseUrl + `/api/all-${filter.mediaType}`);
+  const media = await mediaResponse.json();
+  return media.total_results;
+};
+
 export const getKeywords = async (mediaId) => {
   const filter = get(filters);
   const keywordsResponse = await fetch(baseUrl + `/api/${filter.mediaType}-${mediaId}-keywords`);
