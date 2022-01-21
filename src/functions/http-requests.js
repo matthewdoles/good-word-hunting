@@ -6,7 +6,12 @@ const baseUrl = dev ? import.meta.env.VITE_DEV_API : import.meta.env.VITE_PROD_A
 
 export const getRandomMedia = async () => {
   const filter = get(filters);
-  const mediaResponse = await fetch(baseUrl + `/api/random-${filter.mediaType}`);
+  const poolInfo = await getPoolSize();
+  const randomPage = Math.floor(Math.random() * poolInfo.total_pages) + 1;
+  const mediaResponse = await fetch(
+    baseUrl +
+      `/api/random-${filter.mediaType}-${filter.voteCount}-${filter.rating}-${filter.genre.id}-${randomPage}`
+  );
   let media = await mediaResponse.json();
   if (filter.mediaType === 'tv') {
     media.title = media.name;
@@ -16,9 +21,12 @@ export const getRandomMedia = async () => {
 
 export const getPoolSize = async () => {
   const filter = get(filters);
-  const mediaResponse = await fetch(baseUrl + `/api/all-${filter.mediaType}`);
+  const mediaResponse = await fetch(
+    baseUrl +
+      `/api/all-${filter.mediaType}-${filter.voteCount}-${filter.rating}-${filter.genre.id}-1`
+  );
   const media = await mediaResponse.json();
-  return media.total_results;
+  return media;
 };
 
 export const getKeywords = async (mediaId) => {
