@@ -19,7 +19,7 @@
               name="genre"
               containerClasses="lg:mr-4"
               radioClasses="radio bg-white checked:bg-purple-600"
-              checked={selectedGenre === genre.name}
+              checked={selectedGenre.name === genre.name}
               on:change
             />
           {/if}
@@ -53,7 +53,7 @@
               containerClasses="lg:mr-4"
               radioClasses="radio bg-white checked:bg-purple-600"
               value={JSON.stringify(genre)}
-              checked={selectedGenre === genre.name}
+              checked={selectedGenre.name === genre.name}
               on:change
             />
           {/if}

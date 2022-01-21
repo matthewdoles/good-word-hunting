@@ -1,9 +1,6 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import RadioButton from './RadioButton.svelte';
   export let selectedMediaType;
-
-  const dispatch = createEventDispatcher();
 </script>
 
 <div class="p-4 mb-8 bg-gray-100 text-gray-800 text-center rounded-xl dark:bg-gray-600">

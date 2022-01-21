@@ -7,11 +7,11 @@ const tvMedia = {
     plural: 'shows'
   },
   genre: {
-    id: '',
+    id: 'none',
     name: ''
   },
   voteCount: 500,
-  rating: 6.5
+  rating: 0
 };
 
 const movieMedia = {
@@ -21,11 +21,11 @@ const movieMedia = {
     plural: 'movies'
   },
   genre: {
-    id: '',
+    id: 'none',
     name: ''
   },
   voteCount: 1500,
-  rating: 6.5
+  rating: 0
 };
 
 const filters = writable(movieMedia);
@@ -40,8 +40,17 @@ const customFilters = {
   },
   changeGenre: (genre) => {
     filters.update((items) => {
-      console.log(items);
       return { ...items, genre };
+    });
+  },
+  changeRating: (rating) => {
+    filters.update((items) => {
+      return { ...items, rating };
+    });
+  },
+  changeVoteCount: (voteCount) => {
+    filters.update((items) => {
+      return { ...items, voteCount };
     });
   }
 };
