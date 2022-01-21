@@ -9,7 +9,9 @@ const tvMedia = {
   genre: {
     id: '',
     name: ''
-  }
+  },
+  voteCount: 500,
+  rating: 6.5
 };
 
 const movieMedia = {
@@ -21,7 +23,9 @@ const movieMedia = {
   genre: {
     id: '',
     name: ''
-  }
+  },
+  voteCount: 1500,
+  rating: 6.5
 };
 
 const filters = writable(movieMedia);
