@@ -1,10 +1,12 @@
 <script>
+  import { scale } from 'svelte/transition';
+
   export let profileImage;
   export let username;
   export let isAdmin;
 </script>
 
-<div class="flex flex-col items-center">
+<div in:scale class="flex flex-col items-center">
   <div class="avatar placeholder indicator mt-2">
     {#if isAdmin}
       <div class="indicator-item badge bg-purple-500">Admin</div>
