@@ -6,6 +6,7 @@
   import MediaTypeFilter from '../components/MediaTypeFilter.svelte';
   import MediaPoolSize from '../components/MediaPoolSize.svelte';
   import MediaPopularity from '../components/MediaPopularity.svelte';
+  import GameDifficulty from '../components/GameDifficulty.svelte';
 
   let selectedMediaType = $filters.mediaType;
   let selectedGenre = $filters.genre;
@@ -54,9 +55,10 @@
   <div class="px-4 w-full md:w-1/2 lg:w-1/3">
     <MediaPoolSize {poolSize} isLoading={loadingPool} />
     <MediaTypeFilter {selectedMediaType} on:change={onMediaTypeChange} />
-    <MediaPopularity {voteCount} {rating} on:updatepool={debouncedGetMediaPool} />
+    <GameDifficulty />
   </div>
   <div class="w-full md:w-1/2 lg:w-2/3 px-4">
     <MediaGenres {selectedGenre} on:change={onGenreChange} />
+    <MediaPopularity {voteCount} {rating} on:updatepool={debouncedGetMediaPool} />
   </div>
 </div>
