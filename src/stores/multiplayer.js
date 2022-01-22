@@ -5,28 +5,29 @@ import { writable } from 'svelte/store';
 let socket = io('http://localhost:8080', { 'connect timeout': 5000 });
 
 const initSocket = async () => {
-  socket.on('connect', () => {
-    console.log('socket created with ID:', socket.id);
-  });
+  socket.on('connect', () => {});
 };
 
 if (browser) {
   initSocket();
 }
 
-const multiplayer = writable({ room: '', users: [] });
+const multiplayer = writable({ isAdmin: false, room: '', users: [] });
 
 const customMultiplayer = {
   subscribe: multiplayer.subscribe,
-  createRoom: (username) => {
-    socket.emit('createRoom', username, (error) => {
+  createRoom: (username, profileImage) => {
+    socket.emit('createRoom', { username, profileImage }, (error) => {
       if (error) {
         return console.log(error);
       }
     });
+    multiplayer.update((items) => {
+      return { ...items, isAdmin: true };
+    });
   },
-  joinRoom: (username, roomNumber) => {
-    socket.emit('joinRoom', { username, roomNumber }, (error) => {
+  joinRoom: (username, profileImage, roomNumber) => {
+    socket.emit('joinRoom', { username, profileImage, roomNumber }, (error) => {
       if (error) {
         return console.log(error);
       }
