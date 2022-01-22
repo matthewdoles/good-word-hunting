@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import { Jumper } from 'svelte-loading-spinners';
   import filters from '../stores/filters';
   import Game from '../components/Game.svelte';
@@ -21,7 +22,9 @@
   let isLoading = true;
   let yScroll;
 
-  $: $filters, startNewGame();
+  onMount(() => {
+    startNewGame();
+  });
 
   const onNewGame = async () => {
     media;
@@ -64,7 +67,6 @@
   <Game
     {keywords}
     cast={cast.reverse()}
-    filter={$filters}
     similarMedia={shuffleArray([...similarMedia, media])}
     on:guesssubmit={onGuessSubmit}
   />

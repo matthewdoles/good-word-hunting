@@ -28,14 +28,19 @@ const movieMedia = {
   rating: 0
 };
 
-const filters = writable(movieMedia);
+const filters = writable({ ...movieMedia, difficulty: 'Medium' });
 
 const customFilters = {
   subscribe: filters.subscribe,
   changeMediaType: (mediaType) => {
-    filters.update(() => {
-      if (mediaType === 'movie') return movieMedia;
-      return tvMedia;
+    filters.update((items) => {
+      if (mediaType === 'movie') return { ...movieMedia, difficulty: items.difficulty };
+      return { ...tvMedia, difficulty: items.difficulty };
+    });
+  },
+  changeDifficulty: (difficulty) => {
+    filters.update((items) => {
+      return { ...items, difficulty };
     });
   },
   changeGenre: (genre) => {
