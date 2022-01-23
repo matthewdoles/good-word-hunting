@@ -1,15 +1,15 @@
 <script>
   import CreateJoinLobby from '../components/CreateJoinLobby.svelte';
   import MultiplayerLobby from '../components/MultiplayerLobby.svelte';
-  import multiplayer from '../stores/multiplayer';
+  import multiplayerUser from '../stores/multiplayerUser';
 
   let isJoin = true;
-  let selectingJoinOrCreate = $multiplayer.room === '';
+  let selectingJoinOrCreate = $multiplayerUser.room === '';
   let enteringUserInfo = false;
-  let isInLobby = $multiplayer.room !== '';
+  let isInLobby = $multiplayerUser.room !== '';
 
   $: {
-    if ($multiplayer.room !== '') {
+    if ($multiplayerUser.room !== '') {
       isInLobby = true;
       enteringUserInfo = false;
     }
@@ -42,5 +42,10 @@
 {/if}
 
 {#if isInLobby}
-  <MultiplayerLobby />
+  <MultiplayerLobby
+    on:leavelobby={() => {
+      isInLobby = false;
+      selectingJoinOrCreate = true;
+    }}
+  />
 {/if}

@@ -1,6 +1,6 @@
 <script>
   import Avatar from './Avatar.svelte';
-  import multiplayer from '../stores/multiplayer';
+  import multiplayerUser from '../stores/multiplayerUser';
 
   export let isJoin;
 
@@ -11,9 +11,9 @@
 
   const createOrJoin = () => {
     if (isJoin) {
-      return multiplayer.joinRoom(username, profileImage, roomNumber);
+      return multiplayerUser.joinRoom(username, profileImage, roomNumber);
     }
-    multiplayer.createRoom(username, profileImage);
+    multiplayerUser.createRoom(username, profileImage);
   };
 </script>
 
