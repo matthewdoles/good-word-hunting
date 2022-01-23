@@ -1,12 +1,12 @@
 import { writable } from 'svelte/store';
 import socket from '../functions/socket';
 
-const multiplayerUser = writable({ id: '', isAdmin: false, room: '' });
+const multiplayerUser = writable({ id: '', isAdmin: false, lobbyId: '' });
 
 const customMultiplayerUser = {
   subscribe: multiplayerUser.subscribe,
-  createRoom: (username, profileImage) => {
-    socket.emit('createRoom', { username, profileImage }, (error) => {
+  createLobby: (username, profileImage) => {
+    socket.emit('createLobby', { username, profileImage }, (error) => {
       if (error) {
         return console.log(error);
       }
@@ -15,26 +15,26 @@ const customMultiplayerUser = {
       return { ...items, isAdmin: true };
     });
   },
-  joinRoom: (username, profileImage, roomNumber) => {
-    socket.emit('joinRoom', { username, profileImage, roomNumber }, (error) => {
+  joinLobby: (username, profileImage, lobbyId) => {
+    socket.emit('joinLobby', { username, profileImage, lobbyId }, (error) => {
       if (error) {
         return console.log(error);
       }
     });
   },
-  leaveLobby: (id) => {
-    socket.emit('leaveRoom', { id }, (error) => {
+  leaveLobby: (lobbyId, userId) => {
+    socket.emit('leaveLobby', { lobbyId, userId }, (error) => {
       if (error) {
         return console.log(error);
       }
     });
     multiplayerUser.update(() => {
-      return { id: '', isAdmin: false, room: '' };
+      return { id: '', isAdmin: false, lobbyId: '' };
     });
   },
   updateUserInfo: (userInfo) => {
     multiplayerUser.update((items) => {
-      return { ...items, room: userInfo.room, id: userInfo.id };
+      return { ...items, lobbyId: userInfo.lobbyId, id: userInfo.id };
     });
   }
 };

@@ -9,15 +9,15 @@
 
 <div class="flex flex-row mb-8 items-center">
   <div class="flex flex-col">
-    <div class="stat-title uppercase font-bold dark:text-white">Room Code</div>
-    <div class="stat-value text-purple-500">{$multiplayerLobby.room}</div>
+    <div class="stat-title uppercase font-bold dark:text-white">Lobby Code</div>
+    <div class="stat-value text-purple-500">{$multiplayerLobby.lobbyId}</div>
   </div>
   <div class="flex flex-row ml-8">
     {#if $multiplayerUser.isAdmin}
       <button
         class="w-24 h-10 mr-4 bg-purple-500 border-purple-500 rounded-2xl font-bold text-white"
         on:click={() => {
-          multiplayerLobby.startGame($multiplayerUser.room);
+          multiplayerLobby.startGame($multiplayerUser.lobbyId);
           multiplayerLobby.updateGameStarted();
         }}>Start</button
       >
@@ -25,7 +25,7 @@
     <button
       class="w-24 h-10 bg-red-500 border-red-500 rounded-2xl font-bold text-white"
       on:click={() => {
-        multiplayerUser.leaveLobby($multiplayerUser.id);
+        multiplayerUser.leaveLobby($multiplayerUser.lobbyId, $multiplayerUser.id);
         dispatch('leavelobby');
       }}>Leave</button
     >

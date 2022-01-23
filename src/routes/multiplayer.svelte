@@ -6,13 +6,13 @@
   import multiplayerLobby from '../stores/multiplayerLobby';
 
   let isJoin = true;
-  let selectingJoinOrCreate = $multiplayerUser.room === '';
+  let selectingJoinOrCreate = $multiplayerUser.lobbyId === '';
   let enteringUserInfo = false;
-  let isInLobby = $multiplayerUser.room !== '';
+  let isInLobby = $multiplayerUser.lobbyId !== '';
   let gameInProgress = $multiplayerLobby.gameInProgress;
 
   $: {
-    if ($multiplayerUser.room !== '' && !$multiplayerLobby.gameInProgress) {
+    if ($multiplayerUser.lobbyId !== '' && !$multiplayerLobby.gameInProgress) {
       isInLobby = true;
       enteringUserInfo = false;
     }

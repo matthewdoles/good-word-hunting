@@ -5,20 +5,18 @@ import multiplayerLobby from '../stores/multiplayerLobby';
 
 let socket = io('http://localhost:8080', { 'connect timeout': 5000 });
 
-const initSocket = async () => {
-  socket.on('connect', () => {});
-};
+const initSocket = async () => {};
 
 if (browser) {
   initSocket();
 }
 
-socket.on('gameStarted', () => {
-  multiplayerLobby.updateGameStarted();
+socket.on('gameStarted', (gameInfo) => {
+  multiplayerLobby.updateGameStarted(gameInfo);
 });
 
-socket.on('roomData', (roomInfo) => {
-  multiplayerLobby.updateLobbyUsers(roomInfo);
+socket.on('lobbyData', (lobbyInfo) => {
+  multiplayerLobby.updateLobbyUsers(lobbyInfo);
 });
 
 socket.on('userInfo', (userInfo) => {

@@ -1,30 +1,31 @@
 import { writable } from 'svelte/store';
 import socket from '../functions/socket';
 
-const multiplayerLobby = writable({ gameInProgress: false, room: '', users: [] });
+const multiplayerLobby = writable({ gameInProgress: false, lobbyId: '', users: [] });
 
 const customMultiplayer = {
   subscribe: multiplayerLobby.subscribe,
-  startGame: (room) => {
-    socket.emit('startGame', { room }, (error) => {
+  startGame: (lobbyId) => {
+    socket.emit('startGame', { lobbyId }, (error) => {
       if (error) {
         return console.log(error);
       }
     });
   },
-  updateLobbyUsers: (lobbyInfo) => {
+  updateLobbyUsers: ({ lobbyId, users, gameInProgress }) => {
     multiplayerLobby.update((items) => {
       return {
         ...items,
-        room: lobbyInfo.room,
-        users: lobbyInfo.users,
-        gameInProgress: lobbyInfo.gameInProgress
+        lobbyId,
+        users,
+        gameInProgress
       };
     });
   },
-  updateGameStarted: () => {
+  updateGameStarted: ({ gameInProgress }) => {
+    console.log(gameInProgress);
     multiplayerLobby.update((items) => {
-      return { ...items, gameInProgress: true };
+      return { ...items, gameInProgress };
     });
   }
 };

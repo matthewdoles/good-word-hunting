@@ -5,15 +5,15 @@
   export let isJoin;
 
   let username;
-  let roomNumber;
+  let lobbyId;
   let profileImage;
   let previewAvatar = false;
 
   const createOrJoin = () => {
     if (isJoin) {
-      return multiplayerUser.joinRoom(username, profileImage, roomNumber);
+      return multiplayerUser.joinLobby(username, profileImage, lobbyId);
     }
-    multiplayerUser.createRoom(username, profileImage);
+    multiplayerUser.createLobby(username, profileImage);
   };
 </script>
 
@@ -28,8 +28,8 @@
     <input
       class="w-full md:w-1/2 h-20 bg-gray-100 rounded-xl outline-0 text-lg p-4 my-4 border-4 border-purple-500 font-bold dark:bg-gray-800 dark:text-white"
       type="text"
-      placeholder="Room Code"
-      bind:value={roomNumber}
+      placeholder="Lobby Code"
+      bind:value={lobbyId}
     />
   {/if}
   <div class="w-full md:w-1/2 flex justify-center items-center">
