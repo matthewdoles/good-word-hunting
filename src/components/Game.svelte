@@ -7,6 +7,7 @@
   export let keywords;
   export let cast;
   export let similarMedia;
+  export let isMultiplayer;
 
   let showNumbers = true;
   let showNames = false;
@@ -47,7 +48,11 @@
 <h3 class="text-2xl dark:text-white" in:fly={{ x: -400, duration: 750 }}>
   {keywords.length} words used to describe this {$filters.prompt.singular} are...
 </h3>
-<div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
+<div
+  class={isMultiplayer
+    ? 'mt-4 mb-8 grid gap-4 md:grid-cols-3 grid-cols-2'
+    : 'mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2'}
+>
   {#each keywords as keyword}
     <Card word={keyword.name} />
   {/each}
@@ -78,7 +83,11 @@
       Out of the {cast.length} credits in this {$filters.prompt.singular}, the {numberOfNames} names
       from lowest billed to highest are...
     </h3>
-    <div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
+    <div
+      class={isMultiplayer
+        ? 'mt-4 mb-8 grid gap-4 md:grid-cols-3 grid-cols-2'
+        : 'mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2'}
+    >
       {#each cast as credit, i}
         {#if i < numberOfNames}
           <Card word={credit.name} />

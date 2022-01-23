@@ -16,46 +16,48 @@
       isInLobby = true;
       enteringUserInfo = false;
     }
-    if ($multiplayerLobby.gameInProgress) {
+    if ($multiplayerUser.lobbyId !== '' && $multiplayerLobby.gameInProgress) {
       isInLobby = false;
       gameInProgress = true;
     }
   }
 </script>
 
-{#if selectingJoinOrCreate}
-  <div class="flex justify-center w-full">
-    <button
-      class="w-80 h-80 btn mx-4 bg-purple-500 border-purple-500 rounded-3xl"
-      on:click={() => {
-        isJoin = false;
-        enteringUserInfo = true;
-        selectingJoinOrCreate = false;
-      }}><p class="text-4xl font-bold">Create</p></button
-    >
-    <button
-      class="w-80 h-80 btn mx-4 bg-purple-500 border-purple-500 rounded-3xl"
-      on:click={() => {
-        isJoin = true;
-        enteringUserInfo = true;
-        selectingJoinOrCreate = false;
-      }}><p class="text-4xl font-bold">Join</p></button
-    >
-  </div>
-{/if}
+<div class="max-w-6xl mx-auto">
+  {#if selectingJoinOrCreate}
+    <div class="flex justify-center w-full">
+      <button
+        class="w-80 h-80 btn mx-4 bg-purple-500 border-purple-500 rounded-3xl"
+        on:click={() => {
+          isJoin = false;
+          enteringUserInfo = true;
+          selectingJoinOrCreate = false;
+        }}><p class="text-4xl font-bold">Create</p></button
+      >
+      <button
+        class="w-80 h-80 btn mx-4 bg-purple-500 border-purple-500 rounded-3xl"
+        on:click={() => {
+          isJoin = true;
+          enteringUserInfo = true;
+          selectingJoinOrCreate = false;
+        }}><p class="text-4xl font-bold">Join</p></button
+      >
+    </div>
+  {/if}
 
-{#if enteringUserInfo}
-  <CreateJoinLobby {isJoin} />
-{/if}
+  {#if enteringUserInfo}
+    <CreateJoinLobby {isJoin} />
+  {/if}
 
-{#if isInLobby}
-  <MultiplayerLobby
-    on:leavelobby={() => {
-      isInLobby = false;
-      selectingJoinOrCreate = true;
-    }}
-  />
-{/if}
+  {#if isInLobby}
+    <MultiplayerLobby
+      on:leavelobby={() => {
+        isInLobby = false;
+        selectingJoinOrCreate = true;
+      }}
+    />
+  {/if}
+</div>
 
 {#if gameInProgress}
   <MultiplayerGame />

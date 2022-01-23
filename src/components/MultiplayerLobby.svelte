@@ -10,7 +10,7 @@
 <div class="flex flex-row mb-8 items-center">
   <div class="flex flex-col">
     <div class="stat-title uppercase font-bold dark:text-white">Lobby Code</div>
-    <div class="stat-value text-purple-500">{$multiplayerLobby.lobbyId}</div>
+    <div class="stat-value text-purple-500">{$multiplayerUser.lobbyId}</div>
   </div>
   <div class="flex flex-row ml-8">
     {#if $multiplayerUser.isAdmin}
@@ -26,6 +26,7 @@
       class="w-24 h-10 bg-red-500 border-red-500 rounded-2xl font-bold text-white"
       on:click={() => {
         multiplayerUser.leaveLobby($multiplayerUser.lobbyId, $multiplayerUser.id);
+        multiplayerLobby.leaveLobby();
         dispatch('leavelobby');
       }}>Leave</button
     >

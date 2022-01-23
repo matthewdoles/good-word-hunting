@@ -15,7 +15,7 @@ socket.on('gameStarted', (gameInfo) => {
   multiplayerLobby.updateGameStarted(gameInfo);
 });
 
-socket.on('lobbyData', (lobbyInfo) => {
+socket.on('updateLobbyUsers', (lobbyInfo) => {
   multiplayerLobby.updateLobbyUsers(lobbyInfo);
 });
 
