@@ -1,17 +1,24 @@
 <script>
+  import MultiplayerGame from '../components/MultiplayerGame.svelte';
   import CreateJoinLobby from '../components/CreateJoinLobby.svelte';
   import MultiplayerLobby from '../components/MultiplayerLobby.svelte';
   import multiplayerUser from '../stores/multiplayerUser';
+  import multiplayerLobby from '../stores/multiplayerLobby';
 
   let isJoin = true;
   let selectingJoinOrCreate = $multiplayerUser.room === '';
   let enteringUserInfo = false;
   let isInLobby = $multiplayerUser.room !== '';
+  let gameInProgress = $multiplayerLobby.gameInProgress;
 
   $: {
-    if ($multiplayerUser.room !== '') {
+    if ($multiplayerUser.room !== '' && !$multiplayerLobby.gameInProgress) {
       isInLobby = true;
       enteringUserInfo = false;
+    }
+    if ($multiplayerLobby.gameInProgress) {
+      isInLobby = false;
+      gameInProgress = true;
     }
   }
 </script>
@@ -48,4 +55,8 @@
       selectingJoinOrCreate = true;
     }}
   />
+{/if}
+
+{#if gameInProgress}
+  <MultiplayerGame />
 {/if}

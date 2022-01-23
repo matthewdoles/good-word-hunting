@@ -13,10 +13,15 @@
     <div class="stat-value text-purple-500">{$multiplayerLobby.room}</div>
   </div>
   <div class="flex flex-row ml-8">
-    <button
-      class="w-24 h-10 mr-4 bg-purple-500 border-purple-500 rounded-2xl font-bold text-white"
-      on:click={() => {}}>Start</button
-    >
+    {#if $multiplayerUser.isAdmin}
+      <button
+        class="w-24 h-10 mr-4 bg-purple-500 border-purple-500 rounded-2xl font-bold text-white"
+        on:click={() => {
+          multiplayerLobby.startGame($multiplayerUser.room);
+          multiplayerLobby.updateGameStarted();
+        }}>Start</button
+      >
+    {/if}
     <button
       class="w-24 h-10 bg-red-500 border-red-500 rounded-2xl font-bold text-white"
       on:click={() => {

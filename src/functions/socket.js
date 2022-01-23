@@ -13,6 +13,10 @@ if (browser) {
   initSocket();
 }
 
+socket.on('gameStarted', () => {
+  multiplayerLobby.updateGameStarted();
+});
+
 socket.on('roomData', (roomInfo) => {
   multiplayerLobby.updateLobbyUsers(roomInfo);
 });
