@@ -9,6 +9,8 @@
   export let cast;
   export let keywords;
   export let isCorrect;
+  export let isMultiplayer;
+  export let users;
   export let filter;
 
   const dispatch = createEventDispatcher();
@@ -69,6 +71,35 @@
       on:click={() => dispatch('newgame')}>Play Again</button
     >
   </div>
+  {#if isMultiplayer}
+    <div class="mt-10 mb-8 grid gap-4 md:grid-cols-3 grid-cols-2">
+      {#each users as user}
+        <div class="p-2 mb-8 bg-gray-100 text-gray-800 text-center rounded-xl dark:bg-gray-600">
+          <div class="flex flex-col">
+            <div class="flex flex-row items-center">
+              <div class="avatar placeholder indicator m-2">
+                {#if user.profileImage}
+                  <div class="rounded-full w-10 h-10">
+                    <img src={user.profileImage} alt="Profile Pic" />
+                  </div>
+                {:else}
+                  <div class="bg-neutral-focus text-neutral-content rounded-full w-10 h-10">
+                    <span class="text-xl">{user.username.charAt(0)}</span>
+                  </div>
+                {/if}
+              </div>
+              <p class="ml-2 text-xl font-bold dark:text-white">
+                {user.username}
+              </p>
+            </div>
+            <p class="mb-4 text-xl font-bold dark:text-white">
+              {user.guess}
+            </p>
+          </div>
+        </div>
+      {/each}
+    </div>
+  {/if}
   <h3 class="text-2xl dark:text-white">Keywords</h3>
   <div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
     {#each keywords as keyword}

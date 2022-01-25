@@ -15,6 +15,10 @@ socket.on('gameStarted', (gameInfo) => {
   multiplayerLobby.updateGameStarted(gameInfo);
 });
 
+socket.on('lobbyDoneGuessing', () => {
+  multiplayerLobby.updateLobbyDoneGuessing();
+});
+
 socket.on('updateLobbyUsers', (lobbyInfo) => {
   multiplayerLobby.updateLobbyUsers(lobbyInfo);
 });

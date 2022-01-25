@@ -1,8 +1,11 @@
 <script>
   import Avatar from './Avatar.svelte';
   import Game from './Game.svelte';
+  import GameResults from './GameResults.svelte';
+  import { Circle2 } from 'svelte-loading-spinners';
   import multiplayerUser from '../stores/multiplayerUser';
   import multiplayerLobby from '../stores/multiplayerLobby';
+  import filters from '../stores/filters';
   import { shuffleArray } from '../functions/util';
   import {
     getKeywords,
@@ -16,11 +19,19 @@
   let cast = [];
   let similarMedia = [];
   let guess;
+  let showGame = true;
+  let showWaiting = false;
   let isCorrect = false;
   let yScroll;
   let isLoading = false;
 
   $: $multiplayerLobby.mediaId, startNewGame($multiplayerLobby.mediaId);
+
+  $: {
+    if ($multiplayerLobby.doneGuessing) {
+      showWaiting = false;
+    }
+  }
 
   const startNewGame = async (mediaId) => {
     isLoading = true;
@@ -30,6 +41,17 @@
     cast = await getMediaCredits(mediaId);
     similarMedia = await getSimilarMedia(mediaId);
     isLoading = false;
+  };
+
+  const handleGuessSubmit = (event) => {
+    if (event.detail.guess.length > 0) {
+      yScroll = 0;
+      guess = event.detail.guess;
+      isCorrect = guess.toLowerCase() === media.title.toLowerCase();
+      showGame = false;
+      showWaiting = true;
+      multiplayerLobby.submitGuess($multiplayerUser.id, $multiplayerUser.lobbyId, guess);
+    }
   };
 </script>
 
@@ -46,6 +68,7 @@
             profileImage={user.profileImage}
             username={user.username}
             isAdmin={user.isAdmin}
+            isGuessing={user.isGuessing}
             isListItem="true"
           />
         {/each}
@@ -53,12 +76,39 @@
     </div>
   </div>
   <div class="w-2/3 mx-4">
-    <Game
-      {keywords}
-      cast={cast.reverse()}
-      similarMedia={shuffleArray([...similarMedia, media])}
-      isMultiplayer="true"
-      on:guesssubmit={() => {}}
-    />
+    {#if showGame}
+      <Game
+        {keywords}
+        cast={cast.reverse()}
+        similarMedia={shuffleArray([...similarMedia, media])}
+        isMultiplayer="true"
+        on:guesssubmit={handleGuessSubmit}
+      />
+    {/if}
+    {#if showWaiting}
+      <div class="flex flex-col items-center mt-8">
+        <p class="text-2xl font-bold dark:text-white mb-8">Waiting for all players to guess...</p>
+        <Circle2
+          size="200"
+          colorOuter="#9333ea"
+          colorCenter="#9333ea"
+          colorInner="#9333ea"
+          unit="px"
+        />
+      </div>
+    {/if}
+    {#if $multiplayerLobby.doneGuessing}
+      <GameResults
+        {guess}
+        {media}
+        {isCorrect}
+        {keywords}
+        filter={$filters}
+        {cast}
+        isMultiplayer="true"
+        users={$multiplayerLobby.users}
+        on:newgame={() => {}}
+      />
+    {/if}
   </div>
 </div>

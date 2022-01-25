@@ -1,21 +1,29 @@
 <script>
+  import { DoubleBounce } from 'svelte-loading-spinners';
   import { scale } from 'svelte/transition';
 
   export let profileImage;
   export let username;
   export let isAdmin;
+  export let isGuessing;
   export let isListItem;
 </script>
 
 <div in:scale class={isListItem ? 'flex flex-row items-center' : 'flex flex-col items-center'}>
   <div class="avatar placeholder indicator mt-2">
-    {#if isAdmin}
-      {#if isListItem}
-        <div class="indicator-item badge bg-yellow-500" />
+    {#if isListItem}
+      {#if isGuessing}
+        <div class="h-20 indicator-item badge bg-transparent border-transparent">
+          <DoubleBounce size="20" color="#9333ea" unit="px" />
+        </div>
       {:else}
-        <div class="indicator-item badge bg-purple-500">Admin</div>
+        <div class="indicator-item badge bg-green-500 border-transparent" />
       {/if}
     {/if}
+    {#if !isListItem && isAdmin}
+      <div class="indicator-item badge bg-purple-500">Admin</div>
+    {/if}
+
     {#if profileImage}
       <div class={isListItem ? 'rounded-btn w-16 h-16' : 'rounded-btn w-32 h-32'}>
         <img src={profileImage} alt="Profile Pic" />

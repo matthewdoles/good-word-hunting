@@ -2,13 +2,18 @@ import { writable } from 'svelte/store';
 import socket from '../functions/socket';
 import { getRandomMedia } from '../functions/http-requests';
 
-const multiplayerLobby = writable({ gameInProgress: false, mediaId: '', users: [] });
+const multiplayerLobby = writable({
+  doneGuessing: false,
+  gameInProgress: false,
+  mediaId: '',
+  users: []
+});
 
 const customMultiplayer = {
   subscribe: multiplayerLobby.subscribe,
   leaveLobby: () => {
     multiplayerLobby.update(() => {
-      return { gameInProgress: false, users: [] };
+      return { doneGuessing: false, gameInProgress: false, mediaId: '', users: [] };
     });
   },
   startGame: async (lobbyId) => {
@@ -17,6 +22,21 @@ const customMultiplayer = {
       if (error) {
         return console.log(error);
       }
+    });
+  },
+  submitGuess: (userId, lobbyId, guess) => {
+    socket.emit('submitUserGuess', { userId, lobbyId, guess }, (error) => {
+      if (error) {
+        return console.log(error);
+      }
+    });
+  },
+  updateLobbyDoneGuessing: () => {
+    multiplayerLobby.update((items) => {
+      return {
+        ...items,
+        doneGuessing: true
+      };
     });
   },
   updateLobbyUsers: ({ users }) => {
