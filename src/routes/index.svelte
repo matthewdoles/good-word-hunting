@@ -59,7 +59,7 @@
 
 <svelte:window bind:scrollY={yScroll} />
 
-<div class="max-w-6xl mx-auto">
+<div class="max-w-6xl mx-auto p-8">
   {#if isLoading}
     <div class="flex justify-center">
       <Jumper size="200" color="#9333ea" unit="px" />

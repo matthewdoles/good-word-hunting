@@ -25,7 +25,7 @@
 
 <div class="max-w-6xl mx-auto">
   {#if selectingJoinOrCreate}
-    <div class="flex justify-center w-full">
+    <div class="flex justify-center w-full p-8">
       <button
         class="w-80 h-80 btn mx-4 bg-purple-500 border-purple-500 rounded-3xl"
         on:click={() => {

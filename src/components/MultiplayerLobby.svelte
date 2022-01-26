@@ -7,7 +7,7 @@
   const dispatch = createEventDispatcher();
 </script>
 
-<div class="flex flex-row mb-8 items-center">
+<div class="flex flex-row mb-8 items-center p-8">
   <div class="flex flex-col">
     <div class="stat-title uppercase font-bold dark:text-white">Lobby Code</div>
     <div class="stat-value text-purple-500">{$multiplayerUser.lobbyId}</div>

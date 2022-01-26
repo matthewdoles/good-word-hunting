@@ -11,7 +11,7 @@
 </script>
 
 <div in:scale class={isListItem ? 'flex flex-row items-center' : 'flex flex-col items-center'}>
-  <div class="avatar placeholder indicator mt-2">
+  <div class="avatar placeholder indicator">
     {#if isListItem}
       {#if isGuessing}
         <div class="h-20 indicator-item badge bg-transparent border-transparent">
@@ -26,22 +26,22 @@
     {/if}
 
     {#if profileImage}
-      <div class={isListItem ? 'rounded-btn w-16 h-16' : 'rounded-btn w-32 h-32'}>
+      <div class={isListItem ? 'rounded-btn w-12 h-12' : 'rounded-btn w-32 h-32'}>
         <img src={profileImage} alt="Profile Pic" />
       </div>
     {:else}
       <div
         class={isListItem
-          ? 'bg-neutral-focus text-neutral-content rounded-btn w-16 h-16'
+          ? 'bg-neutral-focus text-neutral-content rounded-btn w-12 h-12'
           : 'bg-neutral-focus text-neutral-content rounded-btn w-32 h-32'}
       >
-        <span class="text-3xl">{username.charAt(0)}</span>
+        <span class="text-xl">{username.charAt(0)}</span>
       </div>
     {/if}
   </div>
   <p
     class={isListItem
-      ? 'ml-4 text-xl font-bold dark:text-white'
+      ? 'ml-4 text-lg font-bold dark:text-white'
       : 'my-2 text-xl font-bold dark:text-white'}
   >
     {username}

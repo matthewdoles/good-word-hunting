@@ -72,7 +72,7 @@
     >
   </div>
   {#if isMultiplayer}
-    <div class="mt-10 mb-8 grid gap-4  md:grid-cols-2 grid-cols-1">
+    <div class="mt-10 mb-8 grid gap-4 md:grid-cols-2 grid-cols-1">
       {#each users as user}
         <div
           class="p-2 mb-8 relative bg-gray-100 text-gray-800 text-center rounded-xl dark:bg-gray-600"
@@ -96,8 +96,8 @@
             </div>
             <p
               class={user.scoreAdded === 0
-                ? 'mb-4 text-3xl font-bold text-red-500'
-                : 'mb-4 text-3xl font-bold text-green-500'}
+                ? 'mx-2 mb-4 text-3xl font-bold text-red-500'
+                : 'mx-2 mb-4 text-3xl font-bold text-green-500'}
             >
               {user.guess}
             </p>

@@ -51,7 +51,7 @@
   };
 </script>
 
-<div class="max-w-6xl mx-auto">
+<div class="max-w-6xl mx-auto p-8">
   <div class="flex flex-col md:flex-row w-full">
     <div class="px-4 w-full md:w-1/2 lg:w-1/3">
       <MediaPoolSize {poolSize} isLoading={loadingPool} />

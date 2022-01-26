@@ -17,7 +17,7 @@
   };
 </script>
 
-<div class="flex flex-col w-full items-center">
+<div class="flex flex-col w-full items-center p-8">
   <input
     class="w-full md:w-1/2 h-20 bg-gray-100 rounded-xl outline-0 text-lg p-4 my-4 border-4 border-purple-500 font-bold dark:bg-gray-800 dark:text-white"
     type="text"

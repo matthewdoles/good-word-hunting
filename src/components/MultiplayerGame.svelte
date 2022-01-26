@@ -58,60 +58,64 @@
 </script>
 
 <div class="flex flex-row w-full">
-  <div class="w-1/3 mx-4 mt-10">
-    <div class="sticky top-10 py-2">
-      <div class="p-4 mb-8 bg-gray-100 text-gray-800 text-center rounded-xl dark:bg-gray-600">
-        <div class="flex flex-col mb-4">
-          <div class="stat-title uppercase font-bold dark:text-white">Lobby Code</div>
-          <div class="stat-value text-purple-500">{$multiplayerUser.lobbyId}</div>
-        </div>
+  <div class="w-full">
+    <div
+      class="flex flex-row sticky top-0 p-8 mb-4 bg-white dark:bg-gray-900 border-b-4 border-purple-500 z-50"
+    >
+      <div class="w-1/12 flex flex-col mt-2">
+        <div class="stat-title uppercase font-bold dark:text-white">Lobby Code</div>
+        <div class="stat-value text-purple-500">{$multiplayerUser.lobbyId}</div>
+      </div>
+      <div class="w-11/12 grid gap-4 md:grid-cols-5 grid-cols-1">
         {#each $multiplayerLobby.users as user}
-          <Avatar
-            profileImage={user.profileImage}
-            username={user.username}
-            isAdmin={user.isAdmin}
-            isGuessing={user.isGuessing}
-            isListItem="true"
-            score={user.score}
-          />
+          <div class="p-4 bg-gray-100 text-gray-800 dark:bg-gray-600 rounded-xl">
+            <Avatar
+              profileImage={user.profileImage}
+              username={user.username}
+              isAdmin={user.isAdmin}
+              isGuessing={user.isGuessing}
+              isListItem="true"
+              score={user.score}
+            />
+          </div>
         {/each}
       </div>
     </div>
-  </div>
-  <div class="w-2/3 mx-4">
-    {#if showGame}
-      <Game
-        {keywords}
-        cast={cast.reverse()}
-        similarMedia={shuffleArray([...similarMedia, media])}
-        isMultiplayer="true"
-        on:guesssubmit={handleGuessSubmit}
-      />
-    {/if}
-    {#if showWaiting}
-      <div class="flex flex-col items-center mt-8">
-        <p class="text-2xl font-bold dark:text-white mb-8">Waiting for all players to guess...</p>
-        <Circle2
-          size="200"
-          colorOuter="#9333ea"
-          colorCenter="#9333ea"
-          colorInner="#9333ea"
-          unit="px"
+    <div class="max-w-6xl mx-auto p-8">
+      {#if showGame}
+        <Game
+          {keywords}
+          cast={cast.reverse()}
+          similarMedia={shuffleArray([...similarMedia, media])}
+          isMultiplayer="true"
+          on:guesssubmit={handleGuessSubmit}
         />
-      </div>
-    {/if}
-    {#if $multiplayerLobby.doneGuessing}
-      <GameResults
-        {guess}
-        {media}
-        {isCorrect}
-        {keywords}
-        filter={$filters}
-        {cast}
-        isMultiplayer="true"
-        users={$multiplayerLobby.users}
-        on:newgame={() => {}}
-      />
-    {/if}
+      {/if}
+      {#if showWaiting}
+        <div class="flex flex-col items-center mt-8">
+          <p class="text-2xl font-bold dark:text-white mb-8">Waiting for all players to guess...</p>
+          <Circle2
+            size="200"
+            colorOuter="#9333ea"
+            colorCenter="#9333ea"
+            colorInner="#9333ea"
+            unit="px"
+          />
+        </div>
+      {/if}
+      {#if $multiplayerLobby.doneGuessing}
+        <GameResults
+          {guess}
+          {media}
+          {isCorrect}
+          {keywords}
+          filter={$filters}
+          {cast}
+          isMultiplayer="true"
+          users={$multiplayerLobby.users}
+          on:newgame={() => {}}
+        />
+      {/if}
+    </div>
   </div>
 </div>
