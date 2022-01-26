@@ -3,7 +3,7 @@ import { browser } from '$app/env';
 import multiplayerUser from '../stores/multiplayerUser';
 import multiplayerLobby from '../stores/multiplayerLobby';
 
-let socket = io('http://localhost:8080', { 'connect timeout': 5000 });
+let socket = io(import.meta.env.VITE_SOCKET_URL, { 'connect timeout': 5000 });
 
 const initSocket = async () => {};
 
