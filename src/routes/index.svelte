@@ -59,25 +59,27 @@
 
 <svelte:window bind:scrollY={yScroll} />
 
-{#if isLoading}
-  <div class="flex justify-center">
-    <Jumper size="200" color="#9333ea" unit="px" />
-  </div>
-{:else if showGame}
-  <Game
-    {keywords}
-    cast={cast.reverse()}
-    similarMedia={shuffleArray([...similarMedia, media])}
-    on:guesssubmit={onGuessSubmit}
-  />
-{:else}
-  <GameResults
-    {guess}
-    {media}
-    {isCorrect}
-    {keywords}
-    filter={$filters}
-    cast={cast.reverse()}
-    on:newgame={onNewGame}
-  />
-{/if}
+<div class="max-w-6xl mx-auto p-8">
+  {#if isLoading}
+    <div class="flex justify-center">
+      <Jumper size="200" color="#9333ea" unit="px" />
+    </div>
+  {:else if showGame}
+    <Game
+      {keywords}
+      cast={cast.reverse()}
+      similarMedia={shuffleArray([...similarMedia, media])}
+      on:guesssubmit={onGuessSubmit}
+    />
+  {:else}
+    <GameResults
+      {guess}
+      {media}
+      {isCorrect}
+      {keywords}
+      filter={$filters}
+      cast={cast.reverse()}
+      on:newgame={onNewGame}
+    />
+  {/if}
+</div>

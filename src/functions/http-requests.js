@@ -4,6 +4,16 @@ import filters from '../stores/filters';
 
 const baseUrl = dev ? import.meta.env.VITE_DEV_API : import.meta.env.VITE_PROD_API;
 
+export const getMedia = async (mediaId) => {
+  const filter = get(filters);
+  const mediaResponse = await fetch(baseUrl + `/api/${filter.mediaType}-${mediaId}-details`);
+  let media = await mediaResponse.json();
+  if (filter.mediaType === 'tv') {
+    media.title = media.name;
+  }
+  return media;
+};
+
 export const getRandomMedia = async () => {
   const filter = get(filters);
   const poolInfo = await getPoolSize();

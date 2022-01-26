@@ -1,0 +1,64 @@
+<script>
+  import MultiplayerGame from '../components/MultiplayerGame.svelte';
+  import CreateJoinLobby from '../components/CreateJoinLobby.svelte';
+  import MultiplayerLobby from '../components/MultiplayerLobby.svelte';
+  import multiplayerUser from '../stores/multiplayerUser';
+  import multiplayerLobby from '../stores/multiplayerLobby';
+
+  let isJoin = true;
+  let selectingJoinOrCreate = $multiplayerUser.lobbyId === '';
+  let enteringUserInfo = false;
+  let isInLobby = $multiplayerUser.lobbyId !== '';
+  let gameInProgress = $multiplayerLobby.gameInProgress;
+
+  $: {
+    if ($multiplayerUser.lobbyId !== '' && !$multiplayerLobby.gameInProgress) {
+      isInLobby = true;
+      enteringUserInfo = false;
+    }
+    if ($multiplayerUser.lobbyId !== '' && $multiplayerLobby.gameInProgress) {
+      isInLobby = false;
+      gameInProgress = true;
+    }
+  }
+</script>
+
+<div class="max-w-6xl mx-auto">
+  {#if selectingJoinOrCreate}
+    <div class="flex justify-center w-full p-8">
+      <button
+        class="w-80 h-80 btn mx-4 bg-purple-500 border-purple-500 rounded-3xl"
+        on:click={() => {
+          isJoin = false;
+          enteringUserInfo = true;
+          selectingJoinOrCreate = false;
+        }}><p class="text-4xl font-bold">Create</p></button
+      >
+      <button
+        class="w-80 h-80 btn mx-4 bg-purple-500 border-purple-500 rounded-3xl"
+        on:click={() => {
+          isJoin = true;
+          enteringUserInfo = true;
+          selectingJoinOrCreate = false;
+        }}><p class="text-4xl font-bold">Join</p></button
+      >
+    </div>
+  {/if}
+
+  {#if enteringUserInfo}
+    <CreateJoinLobby {isJoin} />
+  {/if}
+
+  {#if isInLobby}
+    <MultiplayerLobby
+      on:leavelobby={() => {
+        isInLobby = false;
+        selectingJoinOrCreate = true;
+      }}
+    />
+  {/if}
+</div>
+
+{#if gameInProgress}
+  <MultiplayerGame />
+{/if}

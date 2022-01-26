@@ -51,14 +51,16 @@
   };
 </script>
 
-<div class="flex flex-col md:flex-row w-full">
-  <div class="px-4 w-full md:w-1/2 lg:w-1/3">
-    <MediaPoolSize {poolSize} isLoading={loadingPool} />
-    <MediaTypeFilter {selectedMediaType} on:change={onMediaTypeChange} />
-    <GameDifficulty />
-  </div>
-  <div class="w-full md:w-1/2 lg:w-2/3 px-4">
-    <MediaGenres {selectedGenre} on:change={onGenreChange} />
-    <MediaPopularity {voteCount} {rating} on:updatepool={debouncedGetMediaPool} />
+<div class="max-w-6xl mx-auto p-8">
+  <div class="flex flex-col md:flex-row w-full">
+    <div class="px-4 w-full md:w-1/2 lg:w-1/3">
+      <MediaPoolSize {poolSize} isLoading={loadingPool} />
+      <MediaTypeFilter {selectedMediaType} on:change={onMediaTypeChange} />
+      <GameDifficulty />
+    </div>
+    <div class="w-full md:w-1/2 lg:w-2/3 px-4">
+      <MediaGenres {selectedGenre} on:change={onGenreChange} />
+      <MediaPopularity {voteCount} {rating} on:updatepool={debouncedGetMediaPool} />
+    </div>
   </div>
 </div>
