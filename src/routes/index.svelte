@@ -1,54 +1,85 @@
 <script>
-	import { onMount } from 'svelte';
-	import { Jumper } from 'svelte-loading-spinners';
-	import Game from '../components/Game.svelte';
-	import GameResults from '../components/GameResults.svelte';
-	import { getKeywords, getMovieCredits, getRandomMovie } from '../functions/http-requests';
+  import { onMount } from 'svelte';
+  import { Jumper } from 'svelte-loading-spinners';
+  import filters from '../stores/filters';
+  import Game from '../components/Game.svelte';
+  import GameResults from '../components/GameResults.svelte';
+  import { shuffleArray } from '../functions/util';
+  import {
+    getKeywords,
+    getMediaCredits,
+    getRandomMedia,
+    getSimilarMedia
+  } from '../functions/http-requests';
 
-	let movie;
-	let keywords = [];
-	let cast = [];
-	let guess;
-	let isCorrect = false;
-	let showGame = true;
-	let isLoading = true;
+  let media;
+  let keywords = [];
+  let cast = [];
+  let similarMedia = [];
+  let guess;
+  let isCorrect = false;
+  let showGame = true;
+  let isLoading = true;
+  let yScroll;
 
-	onMount(async () => {
-		startNewGame();
-	});
+  onMount(() => {
+    startNewGame();
+  });
 
-	const onNewGame = async () => {
-		isLoading = true;
-		movie;
-		keywords = [];
-		cast = [];
-		guess = '';
-		isCorrect = false;
-		showGame = true;
+  const onNewGame = async () => {
+    media;
+    keywords = [];
+    cast = [];
+    similarMedia = [];
+    guess = '';
+    isCorrect = false;
+    showGame = true;
+    startNewGame();
+  };
 
-		startNewGame();
-	};
+  const startNewGame = async () => {
+    isLoading = true;
+    yScroll = 0;
+    media = await getRandomMedia();
+    keywords = await getKeywords(media.id);
+    cast = await getMediaCredits(media.id);
+    similarMedia = await getSimilarMedia(media.id);
+    isLoading = false;
+  };
 
-	const startNewGame = async () => {
-		movie = await getRandomMovie();
-		keywords = await getKeywords(movie.id);
-		cast = await getMovieCredits(movie.id);
-		isLoading = false;
-	};
-
-	const onGuessSubmit = (event) => {
-		guess = event.detail.guess;
-		isCorrect = guess.toLowerCase() === movie.title.toLowerCase();
-		showGame = false;
-	};
+  const onGuessSubmit = (event) => {
+    if (event.detail.guess.length > 0) {
+      yScroll = 0;
+      guess = event.detail.guess;
+      isCorrect = guess.toLowerCase() === media.title.toLowerCase();
+      showGame = false;
+    }
+  };
 </script>
 
-{#if isLoading}
-	<div class="flex justify-center">
-		<Jumper size="200" color="#9333ea" unit="px" />
-	</div>
-{:else if showGame}
-	<Game {keywords} cast={cast.reverse()} on:guesssubmit={onGuessSubmit} />
-{:else}
-	<GameResults {guess} {movie} {isCorrect} {keywords} {cast} on:newgame={onNewGame} />
-{/if}
+<svelte:window bind:scrollY={yScroll} />
+
+<div class="max-w-6xl mx-auto p-8">
+  {#if isLoading}
+    <div class="flex justify-center">
+      <Jumper size="200" color="#9333ea" unit="px" />
+    </div>
+  {:else if showGame}
+    <Game
+      {keywords}
+      cast={cast.reverse()}
+      similarMedia={shuffleArray([...similarMedia, media])}
+      on:guesssubmit={onGuessSubmit}
+    />
+  {:else}
+    <GameResults
+      {guess}
+      {media}
+      {isCorrect}
+      {keywords}
+      filter={$filters}
+      cast={cast.reverse()}
+      on:newgame={onNewGame}
+    />
+  {/if}
+</div>
