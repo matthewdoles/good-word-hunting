@@ -50,14 +50,16 @@
       isCorrect = guess.toLowerCase() === media.title.toLowerCase();
       showGame = false;
       showWaiting = true;
-      multiplayerLobby.submitGuess($multiplayerUser.id, $multiplayerUser.lobbyId, guess);
+      let points = isCorrect ? 100 : 0;
+      console.log(points);
+      multiplayerLobby.submitGuess($multiplayerUser.id, $multiplayerUser.lobbyId, guess, points);
     }
   };
 </script>
 
 <div class="flex flex-row w-full">
   <div class="w-1/3 mx-4 mt-10">
-    <div class="sticky top-0 py-2">
+    <div class="sticky top-10 py-2">
       <div class="p-4 mb-8 bg-gray-100 text-gray-800 text-center rounded-xl dark:bg-gray-600">
         <div class="flex flex-col mb-4">
           <div class="stat-title uppercase font-bold dark:text-white">Lobby Code</div>
@@ -70,6 +72,7 @@
             isAdmin={user.isAdmin}
             isGuessing={user.isGuessing}
             isListItem="true"
+            score={user.score}
           />
         {/each}
       </div>

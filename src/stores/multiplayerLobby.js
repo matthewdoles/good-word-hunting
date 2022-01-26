@@ -24,8 +24,8 @@ const customMultiplayer = {
       }
     });
   },
-  submitGuess: (userId, lobbyId, guess) => {
-    socket.emit('submitUserGuess', { userId, lobbyId, guess }, (error) => {
+  submitGuess: (userId, lobbyId, guess, points) => {
+    socket.emit('submitUserGuess', { userId, lobbyId, guess, points }, (error) => {
       if (error) {
         return console.log(error);
       }

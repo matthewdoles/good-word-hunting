@@ -72,9 +72,11 @@
     >
   </div>
   {#if isMultiplayer}
-    <div class="mt-10 mb-8 grid gap-4 md:grid-cols-3 grid-cols-2">
+    <div class="mt-10 mb-8 grid gap-4  md:grid-cols-2 grid-cols-1">
       {#each users as user}
-        <div class="p-2 mb-8 bg-gray-100 text-gray-800 text-center rounded-xl dark:bg-gray-600">
+        <div
+          class="p-2 mb-8 relative bg-gray-100 text-gray-800 text-center rounded-xl dark:bg-gray-600"
+        >
           <div class="flex flex-col">
             <div class="flex flex-row items-center">
               <div class="avatar placeholder indicator m-2">
@@ -92,8 +94,15 @@
                 {user.username}
               </p>
             </div>
-            <p class="mb-4 text-xl font-bold dark:text-white">
+            <p
+              class={user.scoreAdded === 0
+                ? 'mb-4 text-3xl font-bold text-red-500'
+                : 'mb-4 text-3xl font-bold text-green-500'}
+            >
               {user.guess}
+            </p>
+            <p class="absolute top-3 right-3 mb-4 stat-value text-purple-500">
+              +{user.scoreAdded}
             </p>
           </div>
         </div>
@@ -107,7 +116,7 @@
     {/each}
   </div>
   <h3 class="text-2xl dark:text-white">Cast</h3>
-  <div class="mt-4 mb-8 grid gap-4 md:grid-cols-4 grid-cols-2">
+  <div class="mt-4 mb-8 grid gap-4 md:grid-cols-2 grid-cols-1">
     {#each cast as credit, i}
       <a
         href={`https://www.themoviedb.org/person/${credit.id}-${credit.name.split(' ').join('-')}`}

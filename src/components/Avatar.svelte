@@ -7,6 +7,7 @@
   export let isAdmin;
   export let isGuessing;
   export let isListItem;
+  export let score;
 </script>
 
 <div in:scale class={isListItem ? 'flex flex-row items-center' : 'flex flex-col items-center'}>
@@ -47,7 +48,7 @@
   </p>
   {#if isListItem}
     <div class="flex ml-auto">
-      <div class="stat-value text-purple-500">0</div>
+      <div class="stat-value text-purple-500">{score}</div>
     </div>
   {/if}
 </div>
