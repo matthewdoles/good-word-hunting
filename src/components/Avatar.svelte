@@ -22,7 +22,7 @@
       {/if}
     {/if}
     {#if !isListItem && isAdmin}
-      <div class="indicator-item badge bg-purple-500">Admin</div>
+      <div class="indicator-item badge bg-purple-500 font-bold">Admin</div>
     {/if}
 
     {#if profileImage}

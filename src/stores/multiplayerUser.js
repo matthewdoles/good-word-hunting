@@ -38,6 +38,11 @@ const customMultiplayerUser = {
       return initUser;
     });
   },
+  addError: (error) => {
+    multiplayerUser.update((items) => {
+      return { ...items, error };
+    });
+  },
   clearError: () => {
     multiplayerUser.update((items) => {
       return { ...items, error: '' };

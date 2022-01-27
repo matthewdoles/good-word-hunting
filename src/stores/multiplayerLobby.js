@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import socket from '../functions/socket';
+import multiplayerUser from './multiplayerUser';
 import {
   getKeywords,
   getMedia,
@@ -10,8 +11,10 @@ import {
 
 const multiplayerLobby = writable({
   doneGuessing: false,
+  error: '',
   gameInProgress: false,
   mediaId: '',
+  round: 1,
   users: []
 });
 
@@ -21,6 +24,7 @@ const customMultiplayer = {
     multiplayerLobby.update(() => {
       return {
         doneGuessing: false,
+        error: '',
         gameInProgress: false,
         media: {},
         round: 1,
@@ -40,7 +44,7 @@ const customMultiplayer = {
       { lobbyId, media: { ...media, keywords, cast, similarMedia } },
       (error) => {
         if (error) {
-          return console.log(error);
+          multiplayerUser.addError('Sorry, trouble starting game. Please try again.');
         }
       }
     );

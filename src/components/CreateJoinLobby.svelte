@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fly } from 'svelte/transition';
+  import { Jumper } from 'svelte-loading-spinners';
   import MdArrowBack from 'svelte-icons/md/MdArrowBack.svelte';
   import Avatar from './Avatar.svelte';
   import Modal from './Modal.svelte';
@@ -9,6 +10,7 @@
   export let isJoin;
 
   let error = '';
+  let isLoading = false;
   let lobbyId = '';
   let profileImage = '';
   let previewAvatar = false;
@@ -24,8 +26,12 @@
 
   $: {
     if ($multiplayerUser.error.length > 0) {
+      isLoading = false;
       showModal = true;
       error = $multiplayerUser.error;
+    }
+    if (username.length === 0 && profileImage.length === 0) {
+      previewAvatar = false;
     }
   }
 
@@ -35,6 +41,7 @@
       error = 'Please enter a Username.';
       return;
     }
+    isLoading = true;
     if (isJoin) {
       return multiplayerUser.joinLobby(username, profileImage, lobbyId);
     }
@@ -56,7 +63,7 @@
   };
 </script>
 
-<div in:fly={{ x: -400, duration: 750 }} class="w-1/2 mx-auto">
+<div in:fly={{ x: -400, duration: 500 }} class="w-1/2 mx-auto">
   <div
     class="w-24 h-24 flex flex-row items-end text-purple-500 cursor-pointer"
     on:click={() => dispatch('goback')}
@@ -68,13 +75,13 @@
 
 <div class="flex flex-col w-full items-center">
   <input
-    in:fly={{ x: 400, duration: 750 }}
+    in:fly={{ x: 400, duration: 500 }}
     class={inputClasses}
     type="text"
     placeholder="Username"
     bind:value={username}
   />
-  <div class="w-full md:w-1/2 flex justify-center items-center" in:fly={{ x: -400, duration: 750 }}>
+  <div class="w-full md:w-1/2 flex justify-center items-center" in:fly={{ x: -400, duration: 500 }}>
     <input
       class={`${inputClasses} md:w-full h-20 rounded-r-none`}
       type="text"
@@ -93,19 +100,28 @@
   {/if}
   {#if isJoin}
     <input
-      in:fly={{ x: 400, duration: 750 }}
+      in:fly={{ x: 400, duration: 500 }}
       class={inputClasses}
       type="text"
       placeholder="Lobby Code"
       bind:value={lobbyId}
     />
   {/if}
+
   <button
-    in:fly={{ y: 400, duration: 750 }}
+    in:fly={{ y: 400, duration: 500 }}
     class="w-full md:w-1/2 h-20 btn m-4 p-4 bg-purple-500 border-purple-500 font-bold text-xl"
-    on:click={createOrJoin}
+    on:click={() => {
+      if (!isLoading) {
+        createOrJoin();
+      }
+    }}
   >
-    {isJoin ? 'Join' : 'Create'}
+    {#if isLoading}
+      <Jumper size="50" color="white" unit="px" />
+    {:else}
+      {isJoin ? 'Join' : 'Create'}
+    {/if}
   </button>
 </div>
 
