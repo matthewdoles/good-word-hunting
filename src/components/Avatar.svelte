@@ -27,7 +27,7 @@
 
     {#if profileImage}
       <div class={isListItem ? 'rounded-btn w-12 h-12' : 'rounded-btn w-32 h-32'}>
-        <img src={profileImage} alt="Profile Pic" />
+        <img src={profileImage} class="dark:text-white" alt="Profile Pic" />
       </div>
     {:else}
       <div

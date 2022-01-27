@@ -1,14 +1,18 @@
 import { writable } from 'svelte/store';
 import socket from '../functions/socket';
 
-const multiplayerUser = writable({ id: '', isAdmin: false, lobbyId: '' });
+const initUser = { id: '', isAdmin: false, lobbyId: '', error: '' };
+
+const multiplayerUser = writable(initUser);
 
 const customMultiplayerUser = {
   subscribe: multiplayerUser.subscribe,
   createLobby: (username, profileImage) => {
     socket.emit('createLobby', { username, profileImage }, (error) => {
       if (error) {
-        return console.log(error);
+        multiplayerUser.update((items) => {
+          return { ...items, error: 'Sorry, trouble connecting to lobby. Please try again.' };
+        });
       }
     });
     multiplayerUser.update((items) => {
@@ -18,7 +22,9 @@ const customMultiplayerUser = {
   joinLobby: (username, profileImage, lobbyId) => {
     socket.emit('joinLobby', { username, profileImage, lobbyId }, (error) => {
       if (error) {
-        return console.log(error);
+        multiplayerUser.update((items) => {
+          return { ...items, error: 'Sorry, trouble connecting to lobby. Please try again.' };
+        });
       }
     });
   },
@@ -29,7 +35,12 @@ const customMultiplayerUser = {
       }
     });
     multiplayerUser.update(() => {
-      return { id: '', isAdmin: false, lobbyId: '' };
+      return initUser;
+    });
+  },
+  clearError: () => {
+    multiplayerUser.update((items) => {
+      return { ...items, error: '' };
     });
   },
   updateUserInfo: (userInfo) => {

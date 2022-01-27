@@ -1,55 +1,115 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
+  import { fly } from 'svelte/transition';
+  import MdArrowBack from 'svelte-icons/md/MdArrowBack.svelte';
   import Avatar from './Avatar.svelte';
+  import Modal from './Modal.svelte';
   import multiplayerUser from '../stores/multiplayerUser';
 
   export let isJoin;
 
-  let username;
-  let lobbyId;
-  let profileImage;
+  let error = '';
+  let lobbyId = '';
+  let profileImage = '';
   let previewAvatar = false;
+  let showModal = false;
+  let username = '';
+
+  const dispatch = createEventDispatcher();
+
+  const inputClasses =
+    'w-full md:w-1/2 h-20 bg-gray-100 rounded-xl ' +
+    'outline-0 text-lg p-4 my-4 border-4 border-purple-500 font-bold ' +
+    'dark:bg-gray-800 dark:text-white';
+
+  $: {
+    if ($multiplayerUser.error.length > 0) {
+      showModal = true;
+      error = $multiplayerUser.error;
+    }
+  }
 
   const createOrJoin = () => {
+    if (username.length === 0) {
+      showModal = true;
+      error = 'Please enter a Username.';
+      return;
+    }
     if (isJoin) {
       return multiplayerUser.joinLobby(username, profileImage, lobbyId);
     }
     multiplayerUser.createLobby(username, profileImage);
   };
+
+  const handlePreviewAvatar = () => {
+    if (username.length > 0 || profileImage.length > 0) {
+      previewAvatar = true;
+    } else {
+      showModal = true;
+      error = 'Please enter a Username or Profile Image URL.';
+    }
+  };
+
+  const handleCloseModal = () => {
+    showModal = false;
+    multiplayerUser.clearError();
+  };
 </script>
 
-<div class="flex flex-col w-full items-center p-8">
+<div in:fly={{ x: -400, duration: 750 }} class="w-1/2 mx-auto">
+  <div
+    class="w-24 h-24 flex flex-row items-end text-purple-500 cursor-pointer"
+    on:click={() => dispatch('goback')}
+  >
+    <MdArrowBack />
+    <p class="text-2xl font-bold mb-2">Back</p>
+  </div>
+</div>
+
+<div class="flex flex-col w-full items-center">
   <input
-    class="w-full md:w-1/2 h-20 bg-gray-100 rounded-xl outline-0 text-lg p-4 my-4 border-4 border-purple-500 font-bold dark:bg-gray-800 dark:text-white"
+    in:fly={{ x: 400, duration: 750 }}
+    class={inputClasses}
     type="text"
     placeholder="Username"
     bind:value={username}
   />
-  {#if isJoin}
+  <div class="w-full md:w-1/2 flex justify-center items-center" in:fly={{ x: -400, duration: 750 }}>
     <input
-      class="w-full md:w-1/2 h-20 bg-gray-100 rounded-xl outline-0 text-lg p-4 my-4 border-4 border-purple-500 font-bold dark:bg-gray-800 dark:text-white"
-      type="text"
-      placeholder="Lobby Code"
-      bind:value={lobbyId}
-    />
-  {/if}
-  <div class="w-full md:w-1/2 flex justify-center items-center">
-    <input
-      class="w-full h-20 bg-gray-100 rounded-xl outline-0 rounded-r-none outline-0 text-lg p-4 my-4 border-4 border-purple-500 font-bold dark:bg-gray-800 dark:text-white"
+      class={`${inputClasses} md:w-full h-20 rounded-r-none`}
       type="text"
       placeholder="Profile Image URL (optional)"
       bind:value={profileImage}
     />
     <button
-      on:click={() => (previewAvatar = true)}
       class="text-sm h-20 px-2 rounded-l-none rounded-xl outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white"
-      >Preview
+      on:click={handlePreviewAvatar}
+    >
+      Preview
     </button>
   </div>
-  {#if previewAvatar}
-    <Avatar {profileImage} {username} admin="false" />
+  {#if previewAvatar && (username.length > 0 || profileImage.length > 0)}
+    <Avatar admin="false" {profileImage} {username} />
+  {/if}
+  {#if isJoin}
+    <input
+      in:fly={{ x: 400, duration: 750 }}
+      class={inputClasses}
+      type="text"
+      placeholder="Lobby Code"
+      bind:value={lobbyId}
+    />
   {/if}
   <button
+    in:fly={{ y: 400, duration: 750 }}
     class="w-full md:w-1/2 h-20 btn m-4 p-4 bg-purple-500 border-purple-500 font-bold text-xl"
-    on:click={createOrJoin}>{isJoin ? 'Join' : 'Create'}</button
+    on:click={createOrJoin}
   >
+    {isJoin ? 'Join' : 'Create'}
+  </button>
 </div>
+
+{#if showModal}
+  <input class="modal-toggle" type="checkbox" bind:checked={showModal} />
+  <Modal message={error} on:closemodal={handleCloseModal} />
+{/if}
