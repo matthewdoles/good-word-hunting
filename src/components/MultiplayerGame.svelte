@@ -7,55 +7,43 @@
   import multiplayerLobby from '../stores/multiplayerLobby';
   import filters from '../stores/filters';
   import { shuffleArray } from '../functions/util';
-  import {
-    getKeywords,
-    getMedia,
-    getMediaCredits,
-    getSimilarMedia
-  } from '../functions/http-requests';
 
-  let media;
-  let keywords = [];
-  let cast = [];
-  let similarMedia = [];
   let guess;
+  let round = $multiplayerLobby.round;
   let showGame = true;
   let showWaiting = false;
   let isCorrect = false;
   let yScroll;
   let isLoading = false;
 
-  $: $multiplayerLobby.mediaId, startNewGame($multiplayerLobby.mediaId);
-
   $: {
     if ($multiplayerLobby.doneGuessing) {
       showWaiting = false;
     }
+    if ($multiplayerLobby.round !== round) {
+      showGame = true;
+      guess = '';
+      round++;
+      yScroll = 0;
+    }
   }
-
-  const startNewGame = async (mediaId) => {
-    isLoading = true;
-    yScroll = 0;
-    media = await getMedia(mediaId);
-    keywords = await getKeywords(mediaId);
-    cast = await getMediaCredits(mediaId);
-    similarMedia = await getSimilarMedia(mediaId);
-    isLoading = false;
-  };
 
   const handleGuessSubmit = (event) => {
     if (event.detail.guess.length > 0) {
       yScroll = 0;
       guess = event.detail.guess;
-      isCorrect = guess.toLowerCase() === media.title.toLowerCase();
+      isCorrect = guess.toLowerCase() === $multiplayerLobby.media.title.toLowerCase();
       showGame = false;
       showWaiting = true;
       let points = isCorrect ? 100 : 0;
-      console.log(points);
       multiplayerLobby.submitGuess($multiplayerUser.id, $multiplayerUser.lobbyId, guess, points);
     }
   };
+
+  export const roundReset = () => {};
 </script>
+
+<svelte:window bind:scrollY={yScroll} />
 
 <div class="flex flex-row w-full">
   <div class="w-full">
@@ -84,9 +72,12 @@
     <div class="max-w-6xl mx-auto p-8">
       {#if showGame}
         <Game
-          {keywords}
-          cast={cast.reverse()}
-          similarMedia={shuffleArray([...similarMedia, media])}
+          keywords={$multiplayerLobby.media.keywords}
+          cast={$multiplayerLobby.media.cast.reverse()}
+          similarMedia={shuffleArray([
+            ...$multiplayerLobby.media.similarMedia,
+            $multiplayerLobby.media
+          ])}
           isMultiplayer="true"
           on:guesssubmit={handleGuessSubmit}
         />
@@ -106,14 +97,16 @@
       {#if $multiplayerLobby.doneGuessing}
         <GameResults
           {guess}
-          {media}
+          media={$multiplayerLobby.media}
           {isCorrect}
-          {keywords}
+          keywords={$multiplayerLobby.media.keywords}
           filter={$filters}
-          {cast}
+          cast={$multiplayerLobby.media.cast}
           isMultiplayer="true"
           users={$multiplayerLobby.users}
-          on:newgame={() => {}}
+          on:newgame={() => {
+            multiplayerLobby.startNewRound($multiplayerUser.lobbyId);
+          }}
         />
       {/if}
     </div>
