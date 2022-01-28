@@ -1,8 +1,11 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fade } from 'svelte/transition';
+  import { Jumper } from 'svelte-loading-spinners';
   import Card from './Card.svelte';
   import Credit from './Credit.svelte';
+  import Modal from './Modal.svelte';
+  import multiplayerUser from '../stores/multiplayerUser';
 
   export let guess;
   export let media;
@@ -10,10 +13,28 @@
   export let keywords;
   export let isCorrect;
   export let isMultiplayer;
+  export let isAdmin;
   export let users;
   export let filter;
 
+  let error = '';
+  let isLoading = false;
+  let showModal = false;
+
   const dispatch = createEventDispatcher();
+
+  $: {
+    if ($multiplayerUser.error.length > 0) {
+      isLoading = false;
+      showModal = true;
+      error = $multiplayerUser.error;
+    }
+  }
+
+  const handleCloseModal = () => {
+    showModal = false;
+    multiplayerUser.clearError();
+  };
 </script>
 
 <h3
@@ -66,10 +87,22 @@
         alt={media.title}
       />
     </a>
-    <button
-      class="w-1/4 btn btn-block my-4 border-0 bg-purple-600"
-      on:click={() => dispatch('newgame')}>Play Again</button
-    >
+    {#if isAdmin}
+      <button
+        class="w-1/4 btn btn-block my-4 border-0 bg-purple-600"
+        on:click={() => {
+          if (!isLoading) {
+            isLoading = true;
+            dispatch('newgame');
+          }
+        }}
+        >{#if isLoading}
+          <Jumper size="30" color="white" unit="px" />
+        {:else}
+          Start
+        {/if}</button
+      >
+    {/if}
   </div>
   {#if isMultiplayer}
     <div class="mt-10 mb-8 grid gap-4 md:grid-cols-2 grid-cols-1">
@@ -127,3 +160,8 @@
     {/each}
   </div>
 </div>
+
+{#if showModal}
+  <input class="modal-toggle" type="checkbox" bind:checked={showModal} />
+  <Modal message={error} on:closemodal={handleCloseModal} />
+{/if}

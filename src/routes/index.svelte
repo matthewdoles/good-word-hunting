@@ -79,6 +79,7 @@
       {keywords}
       filter={$filters}
       cast={cast.reverse()}
+      isAdmin={true}
       on:newgame={onNewGame}
     />
   {/if}
