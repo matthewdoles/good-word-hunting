@@ -2,7 +2,6 @@
   import { fly, scale } from 'svelte/transition';
   import { Circle2 } from 'svelte-loading-spinners';
   import MdMenu from 'svelte-icons/md/MdMenu.svelte';
-  import MdClose from 'svelte-icons/md/MdClose.svelte';
 
   import Avatar from './Avatar.svelte';
   import Game from './Game.svelte';

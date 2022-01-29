@@ -3,6 +3,7 @@
   import { fly } from 'svelte/transition';
   import { Jumper } from 'svelte-loading-spinners';
   import MdArrowBack from 'svelte-icons/md/MdArrowBack.svelte';
+
   import Avatar from './Avatar.svelte';
   import Modal from './Modal.svelte';
   import multiplayerUser from '../stores/multiplayerUser';
@@ -26,9 +27,9 @@
 
   $: {
     if ($multiplayerUser.error.length > 0) {
+      error = $multiplayerUser.error;
       isLoading = false;
       showModal = true;
-      error = $multiplayerUser.error;
     }
     if (username.length === 0 && profileImage.length === 0) {
       previewAvatar = false;
@@ -37,10 +38,11 @@
 
   const createOrJoin = () => {
     if (username.length === 0) {
-      showModal = true;
       error = 'Please enter a Username.';
+      showModal = true;
       return;
     }
+
     isLoading = true;
     if (isJoin) {
       return multiplayerUser.joinLobby(username, profileImage, lobbyId);
@@ -52,8 +54,8 @@
     if (username.length > 0 || profileImage.length > 0) {
       previewAvatar = true;
     } else {
-      showModal = true;
       error = 'Please enter a Username or Profile Image URL.';
+      showModal = true;
     }
   };
 
@@ -110,7 +112,7 @@
 
   <button
     in:fly={{ y: 400, duration: 500 }}
-    class="w-full md:w-1/2 h-20 btn m-4 p-4 bg-purple-500 border-purple-500 font-bold text-xl"
+    class="btn w-full md:w-1/2 h-20 m-4 p-4 bg-purple-500 border-purple-500 font-bold text-xl"
     on:click={() => {
       if (!isLoading) {
         createOrJoin();

@@ -1,29 +1,30 @@
 <script>
   import { createEventDispatcher, onMount } from 'svelte';
   import { fly } from 'svelte/transition';
+
   import filters from '../stores/filters';
   import Card from './Card.svelte';
 
-  export let keywords;
   export let cast;
-  export let similarMedia;
   export let isMultiplayer;
+  export let keywords;
+  export let similarMedia;
 
+  let difficulty = $filters.difficulty;
+  let guess;
+  let numberOfNames;
   let showNumbers = true;
   let showNames = false;
   let showMultipleChoice = false;
   let showInput = false;
   let showHint = true;
-  let numberOfNames;
-  let guess;
-  let difficulty = $filters.difficulty;
 
   const dispatch = createEventDispatcher();
 
   onMount(() => {
     if (difficulty === 'Easy') {
-      showNames = true;
       numberOfNames = 10;
+      showNames = true;
       showNumbers = false;
       showMultipleChoice = true;
     }
@@ -96,6 +97,7 @@
     </div>
   {/if}
 {/if}
+
 {#if showMultipleChoice}
   <h3 class="mt-8 text-2xl dark:text-white" in:fly={{ x: 400, duration: 750 }}>
     Which of these {$filters.prompt.plural} do you think it could be?
@@ -112,6 +114,7 @@
     {/each}
   </div>
 {/if}
+
 {#if showInput}
   <div in:fly={{ y: 400, duration: 750 }}>
     <h3 class="text-2xl dark:text-white">

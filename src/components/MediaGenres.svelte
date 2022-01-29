@@ -14,12 +14,12 @@
         {#each $genres.movies as genre, i}
           {#if i < 9}
             <RadioButton
-              label={genre.name}
-              value={JSON.stringify(genre)}
-              name="genre"
-              containerClasses="lg:mr-4"
-              radioClasses="radio bg-white checked:bg-purple-600"
               checked={selectedGenre.name === genre.name}
+              containerClasses="lg:mr-4"
+              label={genre.name}
+              name="genre"
+              radioClasses="radio bg-white checked:bg-purple-600"
+              value={JSON.stringify(genre)}
               on:change
             />
           {/if}
@@ -29,12 +29,12 @@
         {#each $genres.movies as genre, i}
           {#if i > 9}
             <RadioButton
+              checked={selectedGenre.name === genre.name}
+              containerClasses="lg:mr-4"
               label={genre.name}
               name="genre"
-              containerClasses="lg:ml-4"
               radioClasses="radio bg-white checked:bg-purple-600"
               value={JSON.stringify(genre)}
-              checked={selectedGenre === genre.name}
               on:change
             />
           {/if}
@@ -48,12 +48,12 @@
         {#each $genres.tv as genre, i}
           {#if i < 9}
             <RadioButton
+              checked={selectedGenre.name === genre.name}
+              containerClasses="lg:mr-4"
               label={genre.name}
               name="genre"
-              containerClasses="lg:mr-4"
               radioClasses="radio bg-white checked:bg-purple-600"
               value={JSON.stringify(genre)}
-              checked={selectedGenre.name === genre.name}
               on:change
             />
           {/if}
@@ -63,12 +63,12 @@
         {#each $genres.movies as genre, i}
           {#if i > 9}
             <RadioButton
+              checked={selectedGenre.name === genre.name}
+              containerClasses="lg:mr-4"
               label={genre.name}
               name="genre"
-              containerClasses="lg:ml-4"
               radioClasses="radio bg-white checked:bg-purple-600"
               value={JSON.stringify(genre)}
-              checked={selectedGenre === genre.name}
               on:change
             />
           {/if}

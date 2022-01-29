@@ -19,7 +19,6 @@
     <a class="btn btn-ghost btn-sm rounded-btn" href="/">Home</a>
     <a class="btn btn-ghost btn-sm rounded-btn" href="/filters">Filters</a>
     <a class="btn btn-ghost btn-sm rounded-btn" href="/multiplayer">Multiplayer</a>
-    <a class="btn btn-ghost btn-sm rounded-btn" href="/about">About</a>
     <div
       class="mx-4 text-lg dark:text-yellow-300 w-7 h-7 cursor-pointer"
       on:click={() => {

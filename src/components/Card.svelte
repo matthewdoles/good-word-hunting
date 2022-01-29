@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { scale } from 'svelte/transition';
+
   export let word;
 
   const dispatch = createEventDispatcher();

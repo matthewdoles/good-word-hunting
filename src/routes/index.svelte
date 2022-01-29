@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { Jumper } from 'svelte-loading-spinners';
+
   import filters from '../stores/filters';
   import Game from '../components/Game.svelte';
   import GameResults from '../components/GameResults.svelte';
@@ -66,20 +67,20 @@
     </div>
   {:else if showGame}
     <Game
-      {keywords}
       cast={cast.reverse()}
+      {keywords}
       similarMedia={shuffleArray([...similarMedia, media])}
       on:guesssubmit={onGuessSubmit}
     />
   {:else}
     <GameResults
+      cast={cast.reverse()}
+      filter={$filters}
       {guess}
-      {media}
+      isAdmin={true}
       {isCorrect}
       {keywords}
-      filter={$filters}
-      cast={cast.reverse()}
-      isAdmin={true}
+      {media}
       on:newgame={onNewGame}
     />
   {/if}

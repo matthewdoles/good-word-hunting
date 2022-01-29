@@ -11,7 +11,7 @@
 <div class={cardClasses} in:scale>
   <div class="w-1/3 flex justify-center">
     <img
-      class="w-32 mask rounded-xl"
+      class="mask p-2 rounded-xl"
       src={`https://image.tmdb.org/t/p/w500${credit.profile_path}`}
       alt={credit.profile_path}
     />
@@ -20,7 +20,7 @@
     <h2 class="text-xl capitalize font-bold dark:text-white">
       {credit.name}
     </h2>
-    <h2 class="dark:text-white">as</h2>
+    <h2 class="dark:text-white font-bold">as</h2>
     <h2 class="text-xl capitalize font-bold dark:text-white">
       {credit.character}
     </h2>

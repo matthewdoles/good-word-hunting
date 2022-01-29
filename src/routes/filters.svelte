@@ -2,11 +2,11 @@
   import { onMount } from 'svelte';
   import filters from '../stores/filters';
   import { getPoolSize } from '../functions/http-requests';
+  import GameDifficulty from '../components/GameDifficulty.svelte';
   import MediaGenres from '../components/MediaGenres.svelte';
   import MediaTypeFilter from '../components/MediaTypeFilter.svelte';
   import MediaPoolSize from '../components/MediaPoolSize.svelte';
   import MediaPopularity from '../components/MediaPopularity.svelte';
-  import GameDifficulty from '../components/GameDifficulty.svelte';
 
   let selectedMediaType = $filters.mediaType;
   let selectedGenre = $filters.genre;

@@ -14,11 +14,11 @@
   <label class="cursor-pointer label">
     <span class="text-xl dark:text-white">{label}</span>
     <input
-      type="radio"
-      {name}
-      class={radioClasses}
-      {value}
       {checked}
+      class={radioClasses}
+      {name}
+      type="radio"
+      {value}
       on:change={() => dispatch('change', { value })}
     />
   </label>
