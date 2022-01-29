@@ -23,7 +23,7 @@
   const drawerClasses =
     'drawer-width menu p-4 overflow-y-auto ' +
     'text-base-content bg-white dark:bg-gray-900 min-h-screen ' +
-    'border-r-4 border-purple-500 cursor-pointer';
+    'border-r-4 border-purple-500';
 
   $: {
     if ($multiplayerLobby.doneGuessing) {
@@ -58,6 +58,14 @@
     <div class="flex flex-row w-full">
       <div class="w-full">
         <div class="max-w-6xl mx-auto p-8">
+          <div class="alert mb-8 rounded-xl bg-purple-500">
+            <div class="flex-1 justify-center">
+              <p class="text-2xl text-white font-bold uppercase">
+                Round {$multiplayerLobby.round}
+              </p>
+            </div>
+          </div>
+
           {#if showGame}
             <Game
               cast={$multiplayerLobby.media.cast.reverse()}
@@ -108,18 +116,15 @@
     <label for="my-drawer" class="drawer-overlay drawer-opactity-none " />
     <ul
       on:click={() => {
-        toggleDrawer = !toggleDrawer;
+        if (toggleDrawer === false) {
+          toggleDrawer = true;
+        }
       }}
-      class={toggleDrawer ? `${drawerClasses} drawer-offset` : drawerClasses}
+      class={toggleDrawer ? `${drawerClasses} drawer-offset` : `${drawerClasses} cursor-pointer`}
     >
       {#if !toggleDrawer}
         <div transition:scale class="w-10 h-10 absolute right-5 dark:text-white">
           <MdMenu />
-        </div>
-      {/if}
-      {#if toggleDrawer}
-        <div transition:scale class="w-10 h-10 absolute right-5 text-red-500">
-          <MdClose />
         </div>
       {/if}
       <li class="flex flex-col mt-2 items-center">

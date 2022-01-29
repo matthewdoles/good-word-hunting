@@ -12,7 +12,7 @@
 </script>
 
 <div class="navbar shadow-md bg-purple-600 text-neutral-content">
-  <div class="px-2 mx-2">
+  <div class="px-2 mx-2 title">
     <span class="text-lg font-bold">Good Word Hunting</span>
   </div>
   <div class="px-2 mx-2">
@@ -31,3 +31,11 @@
     </div>
   </div>
 </div>
+
+<style>
+  @media (max-width: 700px) {
+    .title {
+      display: none !important;
+    }
+  }
+</style>

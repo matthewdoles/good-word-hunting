@@ -48,6 +48,15 @@ const customMultiplayerUser = {
       return { ...items, error: '' };
     });
   },
+  setAsLobbyAdmin: () => {
+    multiplayerUser.update((items) => {
+      return {
+        ...items,
+        isAdmin: true,
+        error: 'Heads up! Admin has disconnected. You are the new lobby Admin.'
+      };
+    });
+  },
   updateUserInfo: (userInfo) => {
     multiplayerUser.update((items) => {
       return { ...items, lobbyId: userInfo.lobbyId, id: userInfo.id };

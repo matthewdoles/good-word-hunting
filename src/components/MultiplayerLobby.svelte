@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte';
   import { fly } from 'svelte/transition';
   import { Jumper } from 'svelte-loading-spinners';
+
   import Avatar from './Avatar.svelte';
   import Modal from './Modal.svelte';
   import multiplayerUser from '../stores/multiplayerUser';
@@ -64,7 +65,12 @@
 </div>
 <div class="mt-4 mb-8 grid gap-4 md:grid-cols-5 grid-cols-3">
   {#each $multiplayerLobby.users as user}
-    <Avatar profileImage={user.profileImage} username={user.username} isAdmin={user.isAdmin} />
+    <div class="flex flex-col items-center">
+      <Avatar profileImage={user.profileImage} username={user.username} isAdmin={user.isAdmin} />
+      <p class="pt-2 text-lg font-bold dark:text-white">
+        {user.username}
+      </p>
+    </div>
   {/each}
 </div>
 

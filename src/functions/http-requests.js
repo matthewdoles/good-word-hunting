@@ -44,9 +44,11 @@ export const getKeywords = async (mediaId) => {
   const keywordsResponse = await fetch(baseUrl + `/api/${filter.mediaType}-${mediaId}-keywords`);
   const allKeywords = await keywordsResponse.json();
   let keywords = [];
-  allKeywords.forEach((keyword, i) => {
-    if (i < 10) {
-      keywords.push(keyword);
+  allKeywords.forEach((keyword) => {
+    if (keywords.length < 10) {
+      if (keyword !== 'duringcreditstinger' || keyword !== 'aftercreditstinger') {
+        keywords.push(keyword);
+      }
     }
   });
   return keywords;

@@ -78,7 +78,7 @@
     <a
       href={`https://www.themoviedb.org/movie/${media.id}-${media.title.split(' ').join('-')}`}
       target="_blank"
-      class="w-1/4 my-4"
+      class="w-1/2 md:w-1/4 my-4"
     >
       <img
         class="border-4 border-transparent hover:border-purple-600"
@@ -89,7 +89,7 @@
     </a>
     {#if isAdmin}
       <button
-        class="w-1/4 btn btn-block my-4 border-0 bg-purple-600"
+        class="w-1/2 md:w-1/4 btn btn-block my-4 border-0 bg-purple-600 font-bold"
         on:click={() => {
           if (!isLoading) {
             isLoading = true;
@@ -99,7 +99,7 @@
         >{#if isLoading}
           <Jumper size="30" color="white" unit="px" />
         {:else}
-          Start
+          Play Again
         {/if}</button
       >
     {/if}

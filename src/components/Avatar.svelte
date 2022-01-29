@@ -19,7 +19,7 @@
     {/if}
   {/if}
   {#if !isListItem && isAdmin}
-    <div class="indicator-item badge bg-purple-500">Admin</div>
+    <div class="indicator-item badge bg-purple-500 border-none font-bold">Admin</div>
   {/if}
   {#if profileImage}
     <div class={isListItem ? 'rounded-btn w-12 h-12' : 'rounded-btn w-32 h-32'}>

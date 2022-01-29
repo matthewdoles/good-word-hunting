@@ -27,6 +27,10 @@ socket.on('updateLobbyUsers', (lobbyInfo) => {
   multiplayerLobby.updateLobbyUsers(lobbyInfo);
 });
 
+socket.on('setAsLobbyAdmin', () => {
+  multiplayerUser.setAsLobbyAdmin();
+});
+
 socket.on('userInfo', (userInfo) => {
   multiplayerUser.updateUserInfo(userInfo);
 });

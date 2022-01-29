@@ -1,6 +1,7 @@
 <script>
   import { scale } from 'svelte/transition';
   import CreateJoinLobby from '../components/CreateJoinLobby.svelte';
+  import Modal from '../components/Modal.svelte';
   import MultiplayerGame from '../components/MultiplayerGame.svelte';
   import MultiplayerLobby from '../components/MultiplayerLobby.svelte';
   import multiplayerUser from '../stores/multiplayerUser';
@@ -10,7 +11,9 @@
   let enteringUserInfo = false;
   let isJoin;
   let isInPregameLobby = $multiplayerUser.lobbyId !== '';
+  let message = '';
   let selectingJoinOrCreate = $multiplayerUser.lobbyId === '';
+  let showModal = false;
 
   $: {
     if ($multiplayerUser.lobbyId !== '' && !$multiplayerLobby.gameInProgress) {
@@ -21,6 +24,10 @@
       gameInProgress = true;
       isInPregameLobby = false;
     }
+    if ($multiplayerUser.error.length > 0) {
+      message = $multiplayerUser.error;
+      showModal = true;
+    }
   }
 
   const handleSelectingJoinOrCreate = (joinClicked) => {
@@ -28,9 +35,16 @@
     isJoin = joinClicked;
     selectingJoinOrCreate = false;
   };
+
   const handleGoBackToSelectingJoinOrCreate = () => {
     enteringUserInfo = false;
     selectingJoinOrCreate = true;
+  };
+
+  const handleCloseModal = () => {
+    message = '';
+    showModal = false;
+    multiplayerUser.clearError();
   };
 </script>
 
@@ -70,4 +84,9 @@
 
 {#if gameInProgress}
   <MultiplayerGame />
+{/if}
+
+{#if showModal}
+  <input class="modal-toggle" type="checkbox" bind:checked={showModal} />
+  <Modal {message} on:closemodal={handleCloseModal} />
 {/if}
