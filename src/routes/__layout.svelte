@@ -4,6 +4,12 @@
 </script>
 
 <Nav />
-<div class="bg-white dark:bg-gray-900 h-full min-h-screen">
+<div class="bg-white dark:bg-gray-900 h-full page-height">
   <slot />
 </div>
+
+<style>
+  .page-height {
+    min-height: calc(100vh - 4rem);
+  }
+</style>

@@ -121,9 +121,9 @@
       What is the name of this {$filters.prompt.singular}?
     </h3>
     <div class="my-4">
-      <div class="flex">
+      <div class="flex input-container">
         <input
-          class="w-full bg-gray-100 rounded-l-xl text-lg p-4 border-4 border-purple-500 font-bold dark:bg-gray-800 dark:text-white"
+          class="w-full bg-gray-100 input-radius rounded-l-xl text-lg p-4 border-4 border-purple-500 font-bold dark:bg-gray-800 dark:text-white"
           type="text"
           placeholder={$filters.mediaType === 'movie' ? 'Name of movie' : 'Name of show'}
           on:keyup={(e) => e.key === 'Enter' && dispatch('guesssubmit', { guess })}
@@ -132,14 +132,14 @@
         <button
           on:click={() => dispatch('guesssubmit', { guess })}
           class={showHint
-            ? 'text-sm p-4 rounded-l-none outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white'
-            : 'text-sm p-4 rounded-r-xl outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white'}
+            ? 'mobile-button text-sm p-4 rounded-l-none outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white'
+            : 'mobile-button text-sm p-4 rounded-r-xl outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white'}
           >Submit
         </button>
         {#if showHint}
           <button
             on:click={() => (showMultipleChoice = true)}
-            class="text-sm p-4 rounded-l-none rounded-r-xl outline-0 border-purple-500 uppercase font-bold bg-gray-100 dark:bg-gray-600 dark:text-white"
+            class="mobile-button text-sm p-4 rounded-l-none rounded-r-xl outline-0 border-purple-500 uppercase font-bold bg-gray-100 dark:bg-gray-600 dark:text-white"
             >Hint
           </button>
         {/if}
@@ -151,5 +151,22 @@
 <style>
   input {
     outline: none !important;
+  }
+  .input-container {
+    flex-direction: row;
+  }
+
+  @media (max-width: 600px) {
+    .input-container {
+      flex-direction: column;
+    }
+    .input-radius {
+      border-bottom-right-radius: 0.75rem;
+      border-top-right-radius: 0.75rem;
+    }
+    .mobile-button {
+      border-radius: 0.75rem;
+      margin-top: 1rem;
+    }
   }
 </style>

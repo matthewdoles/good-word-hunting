@@ -46,7 +46,7 @@ export const getKeywords = async (mediaId) => {
   let keywords = [];
   allKeywords.forEach((keyword) => {
     if (keywords.length < 10) {
-      if (keyword !== 'duringcreditstinger' || keyword !== 'aftercreditstinger') {
+      if (keyword !== 'duringcreditsstinger' || keyword !== 'aftercreditsstinger') {
         keywords.push(keyword);
       }
     }

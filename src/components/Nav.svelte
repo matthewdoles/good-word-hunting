@@ -1,17 +1,15 @@
 <script>
   import { onMount } from 'svelte';
   import FaLightbulb from 'svelte-icons/fa/FaLightbulb.svelte';
-  import filters from '../stores/filters';
 
   let darkMode = true;
-  let listItemClasses = 'h-10 leading-10 text-center rounded-lg align-middle cursor-pointer';
 
   onMount(() => {
     darkMode = document.documentElement.classList.add('dark');
   });
 </script>
 
-<div class="navbar shadow-md bg-purple-600 text-neutral-content">
+<div class="navbar shadow-md bg-purple-600 text-neutral-content nav-height">
   <div class="px-2 mx-2 title">
     <span class="text-lg font-bold">Good Word Hunting</span>
   </div>
@@ -32,6 +30,10 @@
 </div>
 
 <style>
+  .nav-height {
+    min-height: 4rem;
+    max-height: 4rem;
+  }
   @media (max-width: 700px) {
     .title {
       display: none !important;

@@ -109,7 +109,12 @@
       Preview
     </button>
     {#if previewAvatar && (username.length > 0 || profileImage.length > 0)}
-      <Avatar admin="false" {profileImage} {username} />
+      <div class="mt-2 text-center">
+        <Avatar isAdmin={false} isGuessing={false} isListItem={false} {profileImage} {username} />
+        <p class="pt-2 text-lg font-bold dark:text-white">
+          {username}
+        </p>
+      </div>
     {/if}
     {#if isJoin}
       <input

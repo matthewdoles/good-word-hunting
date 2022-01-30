@@ -57,7 +57,7 @@
   <div class="drawer-content">
     <div class="flex flex-row w-full">
       <div class="w-full">
-        <div class="max-w-6xl mx-auto p-8">
+        <div class="max-w-6xl mx-auto p-4 md:p-8">
           <div class="alert mb-8 rounded-xl bg-purple-500 relative flex justify-center">
             <div
               transition:scale
