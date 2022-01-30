@@ -1,38 +1,27 @@
-# create-svelte
+# Good Word Hunting
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+### Description
 
-## Creating a project
+This project was my first solo foray into a Svelte project. The core functionality of the website itself is a trivia game where the user is given up to 10 keywords to describe a movie/tv show and up to 10 cast members in it to then guess the title of said media. The game itself can be played solo or with friends with the ability to apply various filters and difficulties.
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Design
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
+#### URL
 
-# create a new project in my-app
-npm init svelte@next my-app
-```
+- [https://good-word-hunting.vercel.app/](https://good-word-hunting.vercel.app/)
 
-> Note: the `@next` is temporary
+#### Deployment
 
-## Developing
+The site is hosted on [Vercel](https://vercel.com/), which comes in handy for hosting and deploying more niche frameworks like Next, Nuxt, and Svelte. Every commit or merge to main is setup to automatically re-deploy the main branch into production.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+#### API
 
-```bash
-npm run dev
+Data is ultimately pulled from [The Movie Database](https://developers.themoviedb.org/3), but SvelteKit has a great feature where any JavaScript file that default exports a function correlated to an HTTP method becomes an API endpoint. This project utilizes it's own API to retrieve media data using the endpoints found in the [/api](https://github.com/matthewdoles/good-word-hunting/tree/main/src/routes/api) route. Another wonderful featue is the ability to insert dynamic parameters into the route itself. For instance, to get the credits for Star Wars the API route is /api/[mediaType]-[id]-credits. The media type here would be movie and the id of this movie on The Movie Database is 11. The complete production link then being [https://good-word-hunting.vercel.app/api/movie-11-credits](https://good-word-hunting.vercel.app/api/movie-11-credits).
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+#### Features
 
-## Building
+##### Game
 
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
+##### Filters
 
-```bash
-npm run build
-```
-
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
+##### Multiplayer
