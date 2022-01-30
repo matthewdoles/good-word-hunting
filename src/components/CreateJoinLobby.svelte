@@ -65,69 +65,102 @@
   };
 </script>
 
-<div in:fly={{ x: -400, duration: 500 }} class="w-1/2 mx-auto">
-  <div
-    class="w-24 h-24 flex flex-row items-end text-purple-500 cursor-pointer"
-    on:click={() => dispatch('goback')}
-  >
-    <MdArrowBack />
-    <p class="text-2xl font-bold mb-2">Back</p>
-  </div>
-</div>
-
-<div class="flex flex-col w-full items-center">
-  <input
-    in:fly={{ x: 400, duration: 500 }}
-    class={inputClasses}
-    type="text"
-    placeholder="Username"
-    bind:value={username}
-  />
-  <div class="w-full md:w-1/2 flex justify-center items-center" in:fly={{ x: -400, duration: 500 }}>
-    <input
-      class={`${inputClasses} md:w-full h-20 rounded-r-none`}
-      type="text"
-      placeholder="Profile Image URL (optional)"
-      bind:value={profileImage}
-    />
-    <button
-      class="text-sm h-20 px-2 rounded-l-none rounded-xl outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white"
-      on:click={handlePreviewAvatar}
+<div class="mx-4">
+  <div in:fly={{ x: -400, duration: 500 }} class="w-full md:w-1/2 mx-auto">
+    <div
+      class="w-24 h-24 flex flex-row items-end text-purple-500 cursor-pointer"
+      on:click={() => dispatch('goback')}
     >
-      Preview
-    </button>
+      <MdArrowBack />
+      <p class="text-2xl font-bold mb-2">Back</p>
+    </div>
   </div>
-  {#if previewAvatar && (username.length > 0 || profileImage.length > 0)}
-    <Avatar admin="false" {profileImage} {username} />
-  {/if}
-  {#if isJoin}
+
+  <div class="flex flex-col w-full items-center">
     <input
       in:fly={{ x: 400, duration: 500 }}
       class={inputClasses}
       type="text"
-      placeholder="Lobby Code"
-      bind:value={lobbyId}
+      placeholder="Username"
+      bind:value={username}
     />
-  {/if}
-
-  <button
-    in:fly={{ y: 400, duration: 500 }}
-    class="btn w-full md:w-1/2 h-20 m-4 p-4 bg-purple-500 border-purple-500 font-bold text-xl"
-    on:click={() => {
-      if (!isLoading) {
-        createOrJoin();
-      }
-    }}
-  >
-    {#if isLoading}
-      <Jumper size="50" color="white" unit="px" />
-    {:else}
-      {isJoin ? 'Join' : 'Create'}
+    <div
+      class="w-full md:w-1/2 flex justify-center items-center"
+      in:fly={{ x: -400, duration: 500 }}
+    >
+      <input
+        class={`${inputClasses} md:w-full h-20 input-radius`}
+        type="text"
+        placeholder="Profile Image URL (optional)"
+        bind:value={profileImage}
+      />
+      <button
+        class="mobile-hide text-sm h-20 px-2 rounded-l-none rounded-xl outline-0 border-purple-500 bg-purple-500 uppercase font-bold text-white"
+        on:click={handlePreviewAvatar}
+      >
+        Preview
+      </button>
+    </div>
+    <button
+      in:fly={{ y: 400, duration: 500 }}
+      class="btn mobile-show w-full md:w-1/2 h-20 m-4 p-4 bg-purple-500 border-purple-500 font-bold text-xl"
+      on:click={handlePreviewAvatar}
+    >
+      Preview
+    </button>
+    {#if previewAvatar && (username.length > 0 || profileImage.length > 0)}
+      <Avatar admin="false" {profileImage} {username} />
     {/if}
-  </button>
+    {#if isJoin}
+      <input
+        in:fly={{ x: 400, duration: 500 }}
+        class={inputClasses}
+        type="text"
+        placeholder="Lobby Code"
+        bind:value={lobbyId}
+      />
+    {/if}
+
+    <button
+      in:fly={{ y: 400, duration: 500 }}
+      class="btn w-full md:w-1/2 h-20 m-4 p-4 bg-purple-500 border-purple-500 font-bold text-xl"
+      on:click={() => {
+        if (!isLoading) {
+          createOrJoin();
+        }
+      }}
+    >
+      {#if isLoading}
+        <Jumper size="50" color="white" unit="px" />
+      {:else}
+        {isJoin ? 'Join' : 'Create'}
+      {/if}
+    </button>
+  </div>
 </div>
 
 {#if showModal}
   <input class="modal-toggle" type="checkbox" bind:checked={showModal} />
   <Modal message={error} on:closemodal={handleCloseModal} />
 {/if}
+
+<style>
+  @media (max-width: 900px) {
+    .input-radius {
+      border-bottom-right-radius: 0.75rem;
+      border-top-right-radius: 0.75rem;
+    }
+    .mobile-hide {
+      display: none !important;
+    }
+  }
+  @media (min-width: 900px) {
+    .input-radius {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+    .mobile-show {
+      display: none !important;
+    }
+  }
+</style>

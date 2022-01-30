@@ -50,17 +50,17 @@
 
 <div class="max-w-6xl mx-auto">
   {#if selectingJoinOrCreate}
-    <div class="flex justify-center w-full p-8">
+    <div class="flex flex-col md:flex-row items-center justify-center w-full p-8">
       <button
         in:scale
-        class="w-80 h-80 btn mx-4 bg-purple-500 border-purple-500 rounded-3xl"
+        class="w-80 h-80 btn mx-4 mb-8 bg-purple-500 border-purple-500 rounded-3xl"
         on:click={() => handleSelectingJoinOrCreate(false)}
       >
         <p class="text-4xl font-bold">Create</p>
       </button>
       <button
         in:scale
-        class="w-80 h-80 btn mx-4 bg-purple-500 border-purple-500 rounded-3xl"
+        class="w-80 h-80 btn mx-4 mb-8 bg-purple-500 border-purple-500 rounded-3xl"
         on:click={() => handleSelectingJoinOrCreate(true)}
       >
         <p class="text-4xl font-bold">Join</p>

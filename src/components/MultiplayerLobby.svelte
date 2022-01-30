@@ -63,7 +63,7 @@
     {/if}
   </div>
 </div>
-<div class="mt-4 mb-8 grid gap-4 md:grid-cols-5 grid-cols-3">
+<div class="m-4 mb-8 grid gap-4 lg:grid-cols-5 md:grid-cols-4 grid-cols-2">
   {#each $multiplayerLobby.users as user}
     <div class="flex flex-col items-center">
       <Avatar profileImage={user.profileImage} username={user.username} isAdmin={user.isAdmin} />

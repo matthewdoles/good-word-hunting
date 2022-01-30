@@ -2,6 +2,7 @@
   import { fly, scale } from 'svelte/transition';
   import { Circle2 } from 'svelte-loading-spinners';
   import MdMenu from 'svelte-icons/md/MdMenu.svelte';
+  import MdClose from 'svelte-icons/md/MdClose.svelte';
 
   import Avatar from './Avatar.svelte';
   import Game from './Game.svelte';
@@ -57,12 +58,21 @@
     <div class="flex flex-row w-full">
       <div class="w-full">
         <div class="max-w-6xl mx-auto p-8">
-          <div class="alert mb-8 rounded-xl bg-purple-500">
-            <div class="flex-1 justify-center">
-              <p class="text-2xl text-white font-bold uppercase">
-                Round {$multiplayerLobby.round}
-              </p>
+          <div class="alert mb-8 rounded-xl bg-purple-500 relative flex justify-center">
+            <div
+              transition:scale
+              class="w-10 h-10 absolute left-5 dark:text-white show-toggle cursor-pointer"
+              on:click={() => {
+                if (toggleDrawer === false) {
+                  toggleDrawer = true;
+                }
+              }}
+            >
+              <MdMenu />
             </div>
+            <p class="text-2xl text-white font-bold uppercase no-margin-top">
+              Round {$multiplayerLobby.round}
+            </p>
           </div>
 
           {#if showGame}
@@ -111,19 +121,20 @@
       </div>
     </div>
   </div>
-  <div class="drawer-side pl-20">
+  <div class="drawer-side drawer-padding">
     <label for="my-drawer" class="drawer-overlay drawer-opactity-none " />
     <ul
-      on:click={() => {
-        if (toggleDrawer === false) {
-          toggleDrawer = true;
-        }
-      }}
+      on:click={() => (toggleDrawer = !toggleDrawer)}
       class={toggleDrawer ? `${drawerClasses} drawer-offset` : `${drawerClasses} cursor-pointer`}
     >
       {#if !toggleDrawer}
         <div transition:scale class="w-10 h-10 absolute right-5 dark:text-white">
           <MdMenu />
+        </div>
+      {/if}
+      {#if toggleDrawer}
+        <div transition:scale class="w-10 h-10 absolute right-5 text-red-500 cursor-pointer">
+          <MdClose />
         </div>
       {/if}
       <li class="flex flex-col mt-2 items-center">
@@ -170,11 +181,32 @@
   .drawer-opactity-none {
     opacity: 0 !important;
   }
-  .drawer-offset {
-    margin-left: -6rem !important;
-  }
   .drawer-width {
     width: 400px;
     max-width: 400px;
+  }
+  .no-margin-top {
+    margin-top: 0px !important;
+  }
+  @media (min-width: 1300px) {
+    .drawer-offset {
+      margin-left: -6rem !important;
+    }
+    .drawer-padding {
+      padding-left: 5rem;
+    }
+    .show-toggle {
+      display: none;
+    }
+    .drawer-width {
+      width: 400px;
+      max-width: 400px;
+    }
+  }
+  @media (max-width: 600px) {
+    .drawer-width {
+      width: 100vw;
+      max-width: 100vw;
+    }
   }
 </style>
