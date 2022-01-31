@@ -26,17 +26,25 @@
     showModal = false;
     multiplayerUser.clearError();
   };
+
+  const handleShowCopyLink = () => {
+    showModal = true;
+    error = `https://good-word-hunting.vercel.app?lobby=${$multiplayerUser.lobbyId}`;
+  };
 </script>
 
-<div class="flex flex-row mb-8 items-center p-8">
+<div class="flex flex-col md:flex-row mb-8 items-center p-8">
   <div in:fly={{ x: -400, duration: 500 }} class="flex flex-col">
     <div class="stat-title uppercase font-bold dark:text-white">Lobby Code</div>
     <div class="stat-value text-purple-500">{$multiplayerUser.lobbyId}</div>
   </div>
-  <div in:fly={{ x: 400, duration: 500 }} class="flex flex-row ml-8">
+  <div
+    in:fly={{ x: 400, duration: 500 }}
+    class="flex mobile-button-container items-center mt-4 md:ml-8"
+  >
     {#if $multiplayerUser.isAdmin}
       <button
-        class="w-24 h-10 mr-4 flex flex-col justify-center items-center bg-purple-500 border-purple-500 rounded-2xl font-bold text-white"
+        class="w-24 h-10 bg-purple-500 border-purple-500 rounded-2xl font-bold text-white"
         on:click={() => {
           isLoading = true;
           multiplayerLobby.startGame($multiplayerUser.lobbyId);
@@ -49,10 +57,16 @@
           Start
         {/if}
       </button>
+      <button
+        class="w-24 h-10 mobile-button bg-blue-500 border-blue-500 rounded-2xl font-bold text-white"
+        on:click={handleShowCopyLink}
+      >
+        Link
+      </button>
     {/if}
     {#if !isLoading}
       <button
-        class="w-24 h-10 bg-red-500 border-red-500 rounded-2xl font-bold text-white"
+        class="w-24 h-10 mobile-button bg-red-500 border-red-500 rounded-2xl font-bold text-white"
         on:click={() => {
           multiplayerUser.leaveLobby($multiplayerUser.lobbyId, $multiplayerUser.id);
           multiplayerLobby.leaveLobby();
@@ -78,3 +92,22 @@
   <input class="modal-toggle" type="checkbox" bind:checked={showModal} />
   <Modal message={error} on:closemodal={handleCloseModal} />
 {/if}
+
+<style>
+  .mobile-button-container {
+    flex-direction: row;
+  }
+  .mobile-button {
+    margin-left: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .mobile-button-container {
+      flex-direction: column;
+    }
+    .mobile-button {
+      margin-top: 1rem;
+      margin-left: 0;
+    }
+  }
+</style>

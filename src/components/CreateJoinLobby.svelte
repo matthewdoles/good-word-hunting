@@ -9,10 +9,10 @@
   import multiplayerUser from '../stores/multiplayerUser';
 
   export let isJoin;
+  export let lobbyId;
 
   let error = '';
   let isLoading = false;
-  let lobbyId = '';
   let profileImage = '';
   let previewAvatar = false;
   let showModal = false;
