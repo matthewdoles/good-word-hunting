@@ -89,7 +89,7 @@
     </a>
     {#if isAdmin}
       <button
-        class="w-1/2 md:w-1/4 btn btn-block my-4 border-0 bg-purple-600 font-bold"
+        class="w-1/2 md:w-1/4 btn btn-block flex items-center justify-center my-4 border-0 bg-purple-600 font-bold"
         on:click={() => {
           if (!isLoading) {
             isLoading = true;

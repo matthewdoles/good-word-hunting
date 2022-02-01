@@ -1,4 +1,5 @@
 <script>
+  import { page } from '$app/stores';
   import { scale } from 'svelte/transition';
   import CreateJoinLobby from '../components/CreateJoinLobby.svelte';
   import Modal from '../components/Modal.svelte';
@@ -15,7 +16,14 @@
   let selectingJoinOrCreate = $multiplayerUser.lobbyId === '';
   let showModal = false;
 
+  const urlLobbyId = $page.url.searchParams.get('lobby');
+
   $: {
+    if (urlLobbyId) {
+      enteringUserInfo = true;
+      isJoin = true;
+      selectingJoinOrCreate = false;
+    }
     if ($multiplayerUser.lobbyId !== '' && !$multiplayerLobby.gameInProgress) {
       enteringUserInfo = false;
       isInPregameLobby = true;
@@ -69,7 +77,11 @@
   {/if}
 
   {#if enteringUserInfo}
-    <CreateJoinLobby {isJoin} on:goback={handleGoBackToSelectingJoinOrCreate} />
+    <CreateJoinLobby
+      {isJoin}
+      lobbyId={urlLobbyId}
+      on:goback={handleGoBackToSelectingJoinOrCreate}
+    />
   {/if}
 
   {#if isInPregameLobby}

@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
+import { get } from 'svelte/store';
 import socket from '../functions/socket';
+import filters from './filters';
 import multiplayerUser from './multiplayerUser';
 import {
   getKeywords,
@@ -11,6 +13,8 @@ import {
 
 const multiplayerLobby = writable({
   doneGuessing: false,
+  difficulty: 'Easy',
+  newDifficulty: 'Easy',
   error: '',
   gameInProgress: false,
   mediaId: '',
@@ -24,6 +28,8 @@ const customMultiplayer = {
     multiplayerLobby.update(() => {
       return {
         doneGuessing: false,
+        difficulty: 'Easy',
+        newDifficulty: 'Easy',
         error: '',
         gameInProgress: false,
         media: {},
@@ -39,9 +45,14 @@ const customMultiplayer = {
     const cast = await getMediaCredits(media.id);
     const similarMedia = await getSimilarMedia(media.id);
 
+    const userFilters = get(filters);
     socket.emit(
       'startGame',
-      { lobbyId, media: { ...media, keywords, cast, similarMedia } },
+      {
+        difficulty: userFilters.difficulty,
+        lobbyId,
+        media: { ...media, keywords, cast, similarMedia }
+      },
       (error) => {
         if (error) {
           multiplayerUser.addError('Sorry, trouble starting game. Please try again.');
@@ -89,15 +100,21 @@ const customMultiplayer = {
       };
     });
   },
-  updateGameStarted: ({ gameInProgress, round, media }) => {
+  updateGameDifficulty: ({ difficulty }) => {
     multiplayerLobby.update((items) => {
-      return { ...items, gameInProgress, round, media };
+      return { ...items, newDifficulty: difficulty };
+    });
+  },
+  updateGameStarted: ({ difficulty, gameInProgress, round, media }) => {
+    multiplayerLobby.update((items) => {
+      return { ...items, difficulty, newDifficulty: difficulty, gameInProgress, round, media };
     });
   },
   updateNewRoundStartd: ({ round, media, users }) => {
     multiplayerLobby.update((items) => {
       return {
         ...items,
+        difficulty: items.newDifficulty,
         doneGuessing: false,
         round,
         media,

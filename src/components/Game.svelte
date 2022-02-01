@@ -6,11 +6,11 @@
   import Card from './Card.svelte';
 
   export let cast;
+  export let difficulty;
   export let isMultiplayer;
   export let keywords;
   export let similarMedia;
 
-  let difficulty = $filters.difficulty;
   let guess;
   let numberOfNames;
   let showNumbers = true;

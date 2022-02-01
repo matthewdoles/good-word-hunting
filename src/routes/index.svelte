@@ -68,6 +68,7 @@
   {:else if showGame}
     <Game
       cast={cast.reverse()}
+      difficulty={$filters.difficulty}
       {keywords}
       similarMedia={shuffleArray([...similarMedia, media])}
       on:guesssubmit={onGuessSubmit}
