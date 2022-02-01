@@ -41,9 +41,9 @@
   onMount(() => {
     const userIndex = $multiplayerLobby.users.findIndex((user) => user.id === $multiplayerUser.id);
     if (userIndex !== -1) {
-      const existingGuess = $multiplayerLobby.users[userIndex].guess;
-      if (existingGuess.length > 0) {
-        guess = existingGuess;
+      const isGuessing = $multiplayerLobby.users[userIndex].isGuessing;
+      if (!isGuessing) {
+        guess = $multiplayerLobby.users[userIndex].guess;
         isCorrect = existingGuess.toLowerCase() === $multiplayerLobby.media.title.toLowerCase();
         showGame = false;
         showWaiting = true;
@@ -93,6 +93,7 @@
           {#if showGame}
             <Game
               cast={$multiplayerLobby.media.cast.reverse()}
+              difficulty={$multiplayerLobby.difficulty}
               isMultiplayer="true"
               keywords={$multiplayerLobby.media.keywords}
               similarMedia={shuffleArray([

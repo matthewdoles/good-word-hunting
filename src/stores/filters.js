@@ -1,4 +1,7 @@
 import { writable } from 'svelte/store';
+import { get } from 'svelte/store';
+import socket from '../functions/socket';
+import multiplayerUser from './multiplayerUser';
 
 const tvMedia = {
   mediaType: 'tv',
@@ -42,6 +45,15 @@ const customFilters = {
     filters.update((items) => {
       return { ...items, difficulty };
     });
+
+    const user = get(multiplayerUser);
+    if (user.lobbyId.length > 0 && user.isAdmin) {
+      socket.emit('updateGameDifficulty', { lobbyId: user.lobbyId, difficulty }, (error) => {
+        if (error) {
+          console.log(error);
+        }
+      });
+    }
   },
   changeGenre: (genre) => {
     filters.update((items) => {
