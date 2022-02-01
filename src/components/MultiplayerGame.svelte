@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import { fly, scale } from 'svelte/transition';
   import { Circle2 } from 'svelte-loading-spinners';
   import MdMenu from 'svelte-icons/md/MdMenu.svelte';
@@ -36,6 +37,20 @@
       yScroll = 0;
     }
   }
+
+  onMount(() => {
+    const userIndex = $multiplayerLobby.users.findIndex((user) => user.id === $multiplayerUser.id);
+    if (userIndex !== -1) {
+      const existingGuess = $multiplayerLobby.users[userIndex].guess;
+      if (existingGuess.length > 0) {
+        guess = existingGuess;
+        isCorrect = existingGuess.toLowerCase() === $multiplayerLobby.media.title.toLowerCase();
+        showGame = false;
+        showWaiting = true;
+        yScroll = 0;
+      }
+    }
+  });
 
   const handleGuessSubmit = (event) => {
     if (event.detail.guess.length > 0) {
