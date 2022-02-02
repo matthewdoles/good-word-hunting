@@ -73,7 +73,7 @@ export const getSimilarMedia = async (mediaId) => {
   const allSimilar = await castResponse.json();
   let similar = [];
   allSimilar.forEach((similarMedia, i) => {
-    if (i < 7) {
+    if (i < 7 && similarMedia.id !== mediaId) {
       if (filter.mediaType === 'tv') {
         similarMedia.title = similarMedia.name;
       }
