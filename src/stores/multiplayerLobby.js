@@ -10,6 +10,7 @@ import {
   getRandomMedia,
   getSimilarMedia
 } from '../functions/http-requests';
+import { shuffleArray } from '../functions/util';
 
 const multiplayerLobby = writable({
   doneGuessing: false,
@@ -51,7 +52,13 @@ const customMultiplayer = {
       {
         difficulty: userFilters.difficulty,
         lobbyId,
-        media: { ...media, keywords, cast, similarMedia }
+        media: {
+          ...media,
+          keywords,
+          cast,
+          reverseCast: cast.reverse(),
+          similarMedia: shuffleArray([...similarMedia, media])
+        }
       },
       (error) => {
         if (error) {
@@ -69,7 +76,16 @@ const customMultiplayer = {
 
     socket.emit(
       'newRoundStarted',
-      { lobbyId, media: { ...media, keywords, cast, similarMedia } },
+      {
+        lobbyId,
+        media: {
+          ...media,
+          keywords,
+          cast,
+          reverseCast: cast.reverse(),
+          similarMedia: shuffleArray([...similarMedia, media])
+        }
+      },
       (error) => {
         if (error) {
           return console.log(error);

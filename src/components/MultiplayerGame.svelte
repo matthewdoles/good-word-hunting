@@ -92,14 +92,11 @@
 
           {#if showGame}
             <Game
-              cast={$multiplayerLobby.media.cast.reverse()}
+              cast={$multiplayerLobby.media.reverseCast}
               difficulty={$multiplayerLobby.difficulty}
               isMultiplayer="true"
               keywords={$multiplayerLobby.media.keywords}
-              similarMedia={shuffleArray([
-                ...$multiplayerLobby.media.similarMedia,
-                $multiplayerLobby.media
-              ])}
+              similarMedia={$multiplayerLobby.media.similarMedia}
               on:guesssubmit={handleGuessSubmit}
             />
           {/if}
@@ -119,7 +116,7 @@
           {/if}
           {#if $multiplayerLobby.doneGuessing}
             <GameResults
-              cast={$multiplayerLobby.media.cast.reverse()}
+              cast={$multiplayerLobby.media.cast}
               filter={$filters}
               {guess}
               isAdmin={$multiplayerUser.isAdmin}
