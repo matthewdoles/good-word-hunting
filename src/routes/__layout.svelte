@@ -3,6 +3,10 @@
   import '../app.css';
 </script>
 
+<svelte:head>
+  <title>Good Word Hunting</title>
+</svelte:head>
+
 <Nav />
 <div class="bg-white dark:bg-gray-900 h-full page-height">
   <slot />
