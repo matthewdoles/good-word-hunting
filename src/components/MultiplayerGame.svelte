@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { tweened } from 'svelte/motion';
   import { fly, scale } from 'svelte/transition';
   import { Circle2 } from 'svelte-loading-spinners';
   import MdMenu from 'svelte-icons/md/MdMenu.svelte';
@@ -11,7 +12,6 @@
   import filters from '../stores/filters';
   import multiplayerUser from '../stores/multiplayerUser';
   import multiplayerLobby from '../stores/multiplayerLobby';
-  import { shuffleArray } from '../functions/util';
 
   let isCorrect = false;
   let guess;
@@ -20,6 +20,14 @@
   let showWaiting = false;
   let toggleDrawer = false;
   let yScroll;
+  let timer = 30;
+  let progressValue = 0;
+  let interval;
+
+  const progress = tweened(0, {
+    delay: 0,
+    duration: 1000
+  });
 
   const drawerClasses =
     'drawer-width menu p-4 overflow-y-auto ' +
@@ -35,6 +43,10 @@
       round++;
       showGame = true;
       yScroll = 0;
+      timer = 30;
+      progressValue = 0;
+      progress.set(0);
+      createInterval();
     }
   }
 
@@ -44,36 +56,73 @@
       const isGuessing = $multiplayerLobby.users[userIndex].isGuessing;
       if (!isGuessing) {
         guess = $multiplayerLobby.users[userIndex].guess;
-        isCorrect = existingGuess.toLowerCase() === $multiplayerLobby.media.title.toLowerCase();
+        isCorrect = guess.toLowerCase() === $multiplayerLobby.media.title.toLowerCase();
         showGame = false;
-        showWaiting = true;
+        if (!$multiplayerLobby.doneGuessing) {
+          showWaiting = true;
+        }
         yScroll = 0;
       }
     }
+    if ($multiplayerLobby.doneGuessing) {
+      showGame = false;
+      return;
+    }
+    createInterval();
   });
 
   const handleGuessSubmit = (event) => {
     if (event.detail.guess.length > 0) {
-      guess = event.detail.guess;
-      isCorrect = guess.toLowerCase() === $multiplayerLobby.media.title.toLowerCase();
-      showGame = false;
-      showWaiting = true;
-      yScroll = 0;
-
-      let points = isCorrect ? 100 : 0;
-      multiplayerLobby.submitGuess($multiplayerUser.id, $multiplayerUser.lobbyId, guess, points);
+      submitGuess(event.detail.guess);
     }
+  };
+
+  const submitGuess = (submittedGuess) => {
+    guess = submittedGuess;
+    isCorrect = guess.toLowerCase() === $multiplayerLobby.media.title.toLowerCase();
+    showGame = false;
+    showWaiting = true;
+    clearInterval(interval);
+
+    let points = isCorrect ? 100 : 0;
+    multiplayerLobby.submitGuess($multiplayerUser.id, $multiplayerUser.lobbyId, guess, points);
+  };
+
+  const createInterval = () => {
+    interval = setInterval(() => {
+      if (timer === 0) {
+        submitGuess('');
+        clearInterval(interval);
+      }
+      timer = --timer;
+      progressValue = ++progressValue;
+      progress.set(progressValue);
+    }, 1000);
   };
 </script>
 
 <svelte:window bind:scrollY={yScroll} />
-<div class="drawer">
+<div class="drawer drawer-height">
   <input id="my-drawer" type="checkbox" class="drawer-toggle" bind:checked={toggleDrawer} />
   <div class="drawer-content">
     <div class="flex flex-row w-full">
       <div class="w-full">
-        <div class="max-w-6xl mx-auto p-4 md:p-8">
-          <div class="alert mb-8 rounded-xl bg-purple-500 relative flex justify-center">
+        <div class="max-w-6xl mx-auto mb-44 px-4 md:px-8">
+          {#if showGame}
+            <div class="bg-white dark:bg-gray-900 sticky top-0 z-40">
+              <div class="mt-4 justify-center w-full font-mono text-6xl countdown dark:text-white">
+                <span style={`--value:${timer}`} />
+              </div>
+              <div class="p-0 m-0 w-full z-40">
+                <progress class="progress progress-secondary" value={$progress} max="30" />
+              </div>
+            </div>
+          {/if}
+          <div
+            class={showGame
+              ? 'alert mb-8 rounded-xl bg-purple-500 relative flex justify-center'
+              : 'alert my-8 rounded-xl bg-purple-500 relative flex justify-center'}
+          >
             <div
               transition:scale
               class="w-10 h-10 absolute left-5 dark:text-white show-toggle cursor-pointer"
@@ -92,7 +141,7 @@
 
           {#if showGame}
             <Game
-              cast={$multiplayerLobby.media.reverseCast}
+              cast={[...$multiplayerLobby.media.cast.sort((a, b) => b.order - a.order)]}
               difficulty={$multiplayerLobby.difficulty}
               isMultiplayer="true"
               keywords={$multiplayerLobby.media.keywords}
@@ -116,7 +165,7 @@
           {/if}
           {#if $multiplayerLobby.doneGuessing}
             <GameResults
-              cast={$multiplayerLobby.media.cast}
+              cast={[...$multiplayerLobby.media.cast.sort((a, b) => a.order - b.order)]}
               filter={$filters}
               {guess}
               isAdmin={$multiplayerUser.isAdmin}
@@ -191,6 +240,9 @@
 </div>
 
 <style>
+  .drawer-height {
+    height: calc(100vh - 4rem);
+  }
   .drawer-opactity-none {
     opacity: 0 !important;
   }

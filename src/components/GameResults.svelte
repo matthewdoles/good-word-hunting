@@ -44,7 +44,7 @@
     duration: 1000
   }}
 >
-  You guessed: <p class="text-2xl font-bold pl-2">{guess}</p>
+  You guessed: <p class="text-2xl font-bold pl-2">{guess !== undefined ? guess : ''}</p>
 </h3>
 <h3
   class="text-2xl text-center my-4 dark:text-white"

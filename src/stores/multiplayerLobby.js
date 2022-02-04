@@ -56,7 +56,6 @@ const customMultiplayer = {
           ...media,
           keywords,
           cast,
-          reverseCast: cast.reverse(),
           similarMedia: shuffleArray([...similarMedia, media])
         }
       },
@@ -121,9 +120,17 @@ const customMultiplayer = {
       return { ...items, newDifficulty: difficulty };
     });
   },
-  updateGameStarted: ({ difficulty, gameInProgress, round, media }) => {
+  updateGameStarted: ({ doneGuessing, difficulty, gameInProgress, round, media }) => {
     multiplayerLobby.update((items) => {
-      return { ...items, difficulty, newDifficulty: difficulty, gameInProgress, round, media };
+      return {
+        ...items,
+        doneGuessing,
+        difficulty,
+        newDifficulty: difficulty,
+        gameInProgress,
+        round,
+        media
+      };
     });
   },
   updateNewRoundStartd: ({ round, media, users }) => {
