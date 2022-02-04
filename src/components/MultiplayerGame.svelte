@@ -11,6 +11,7 @@
   import GameResults from './GameResults.svelte';
   import filters from '../stores/filters';
   import multiplayerUser from '../stores/multiplayerUser';
+  import multiplayerTimer from '../stores/multiplayerTimer';
   import multiplayerLobby from '../stores/multiplayerLobby';
 
   let isCorrect = false;
@@ -20,9 +21,6 @@
   let showWaiting = false;
   let toggleDrawer = false;
   let yScroll;
-  let timer = 30;
-  let progressValue = 0;
-  let interval;
 
   const progress = tweened(0, {
     delay: 0,
@@ -43,11 +41,15 @@
       round++;
       showGame = true;
       yScroll = 0;
-      timer = 30;
-      progressValue = 0;
       progress.set(0);
-      createInterval();
+      multiplayerTimer.resetTimer();
+      multiplayerTimer.startTimer();
     }
+    if ($multiplayerTimer.timeUp && !$multiplayerTimer.guessSubmitted) {
+      console.log('enter');
+      submitGuess('');
+    }
+    progress.set($multiplayerTimer.progressValue);
   }
 
   onMount(() => {
@@ -68,7 +70,9 @@
       showGame = false;
       return;
     }
-    createInterval();
+    if (!$multiplayerTimer.timerStarted) {
+      multiplayerTimer.startTimer();
+    }
   });
 
   const handleGuessSubmit = (event) => {
@@ -82,22 +86,10 @@
     isCorrect = guess.toLowerCase() === $multiplayerLobby.media.title.toLowerCase();
     showGame = false;
     showWaiting = true;
-    clearInterval(interval);
 
     let points = isCorrect ? 100 : 0;
     multiplayerLobby.submitGuess($multiplayerUser.id, $multiplayerUser.lobbyId, guess, points);
-  };
-
-  const createInterval = () => {
-    interval = setInterval(() => {
-      if (timer === 0) {
-        submitGuess('');
-        clearInterval(interval);
-      }
-      timer = --timer;
-      progressValue = ++progressValue;
-      progress.set(progressValue);
-    }, 1000);
+    multiplayerTimer.stopTimer();
   };
 </script>
 
@@ -111,7 +103,7 @@
           {#if showGame}
             <div class="bg-white dark:bg-gray-900 sticky top-0 z-40">
               <div class="mt-4 justify-center w-full font-mono text-6xl countdown dark:text-white">
-                <span style={`--value:${timer}`} />
+                <span style={`--value:${$multiplayerTimer.timer}`} />
               </div>
               <div class="p-0 m-0 w-full z-40">
                 <progress class="progress progress-secondary" value={$progress} max="30" />
